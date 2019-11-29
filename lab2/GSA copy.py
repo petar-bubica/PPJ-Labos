@@ -54,6 +54,9 @@ def ucitaj_produkcije_gramatike():
 def uljepsaj_gramatiku():
     for nezavrsni in gramatika:
         gramatika[nezavrsni] = gramatika[nezavrsni][:len(gramatika[nezavrsni])-1]
+        gramatika[nezavrsni] = gramatika[nezavrsni].replace(" ","")
+    for nezavrsni in gramatika:
+        gramatika[nezavrsni] = gramatika[nezavrsni].split("|")
 
 def main():
     ucitaj_podatke()
