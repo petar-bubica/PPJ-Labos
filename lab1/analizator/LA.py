@@ -187,13 +187,3 @@ def simuliraj():
 trenutno_stanje = ""
 broj_retka = 1
 izvorni_kod = ""
-tablica_prijelaza = {(2, 'a'): [3], (0, ''): [2], (4, 'a'): [5], (3, ''): [4], (6, 'a'): [7], (5, ''): [6], (7, ''): [1], (-1, ''): [0, 8, 18], (10, 'a'): [11], (8, ''): [10], (12, 'a'): [13], (11, ''): [12], (14, 'a'): [15], (13, ''): [14], (16, 'a'): [17], (15, ''): [16], (17, ''): [9], (20, '\n'): [21], (18, ''): [20], (21, ''): [19]}
-leksicka_pravila = [('S_jedan', ['A_JED']), ('S_jedan', ['B_JED']), ('S_jedan', ['-', 'NOVI_REDAK'])]
-lista_stanja = ['S_jedan']
-trenutno_stanje = 'S_jedan'
-prihvatljiva_stanja = [1, 9, 19]
-
-""" [Main metoda] """
-
-ucitaj_kod()
-simuliraj()

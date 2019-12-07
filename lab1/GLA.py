@@ -321,8 +321,8 @@ def izgradi_automat():
 
 
 def generirajLA():
-    datotekaLA_predlozak = open("analizator/LA", "rt")
-    datotekaLA = open("analizator/LA.py", "wt")
+    datotekaLA_predlozak = open("PPJLabosi\ppj-labos\lab1\\analizator\LA", "rt")
+    datotekaLA = open("PPJLabosi\ppj-labos\lab1\\analizator\LA.py", "wt")
     datotekaLA.write(datotekaLA_predlozak.read())
     datotekaLA_predlozak.close()
     datotekaLA.write("\ntablica_prijelaza = " + str(glavni_automat.funkcije_prijelaza) + "\n")
@@ -369,12 +369,3 @@ reformatiraj_regularne_definicije()
 reformatiraj_pravila()
 izgradi_automat()
 generirajLA()
-"""
-print("tablica_prijelaza = " + str(glavni_automat.funkcije_prijelaza))
-print(ispis_tablica_prijelaza_malih_automata())
-print(ispis_koda_leksickih_pravila())
-print("lista_stanja = " + str(lista_stanja))
-print("prihvatljiva_stanja = " + str(glavni_automat.prihvatljiva_stanja))
-print("broj_stanja_u_automatu = " + str(glavni_automat.broj_stanja))
-print("regularne definicije: ", regularne_definicije)
-"""
