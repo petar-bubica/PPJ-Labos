@@ -1,3 +1,9 @@
+import Izrazi
+import Deklaracija_I_Funkcije
+from CvorStabla import CvorStabla
+from CvorTablice import CvorTablice
+
+
 def slozena_naredba(cvor_stabla):
     return
 

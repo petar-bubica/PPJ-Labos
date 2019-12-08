@@ -1,3 +1,9 @@
+import Izrazi
+import NaredbenaStruktura
+from CvorStabla import CvorStabla
+from CvorTablice import CvorTablice
+
+
 def definicija_funkcije(cvor_stabla):
     return
 

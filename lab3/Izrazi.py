@@ -1,3 +1,9 @@
+import NaredbenaStruktura
+import Deklaracija_I_Funkcije
+from CvorStabla import CvorStabla
+from CvorTablice import CvorTablice
+
+
 def primarni_izraz(cvor_stabla):
     return
 

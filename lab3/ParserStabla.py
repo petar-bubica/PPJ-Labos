@@ -5,7 +5,8 @@ from CvorStabla import CvorStabla
 def parsiraj():
     ulaz = sys.stdin.read().splitlines()
 
-    cvor_roditelj = CvorStabla(ulaz[0], 0)
+    korijen_stabla = CvorStabla(ulaz[0], 0)
+    cvor_roditelj = korijen_stabla
 
     lista_cvorova = list()
     lista_cvorova.append(cvor_roditelj)
@@ -29,8 +30,9 @@ def parsiraj():
 
             cvor_roditelj = nadji_roditelja(cvor, lista_cvorova)
             cvor_roditelj.dodaj_dijete(cvor)
-    #print(lista_cvorova)
-    lista_cvorova[0].prikaziDjecu()
+
+    korijen_stabla.ispisi_podstablo(korijen_stabla)
+    print(lista_cvorova[2].ime())
 
 
 def nadji_roditelja(cvor, lista_cvorova):
@@ -41,6 +43,3 @@ def nadji_roditelja(cvor, lista_cvorova):
             zapamti = cvor_roditelj
 
     return zapamti
-
-
-parsiraj()
