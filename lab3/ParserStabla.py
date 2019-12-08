@@ -1,6 +1,7 @@
 import sys
 from CvorStabla import CvorStabla
 
+
 def parsiraj():
     ulaz = sys.stdin.read().splitlines()
 
