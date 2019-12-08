@@ -29,6 +29,8 @@ def parsiraj():
 
             cvor_roditelj = nadji_roditelja(cvor, lista_cvorova)
             cvor_roditelj.dodaj_dijete(cvor)
+    #print(lista_cvorova)
+    lista_cvorova[0].prikaziDjecu()
 
 
 def nadji_roditelja(cvor, lista_cvorova):
