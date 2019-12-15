@@ -1,4 +1,5 @@
 import sys
+import config
 from CvorStabla import CvorStabla
 
 
@@ -31,8 +32,9 @@ def parsiraj():
             cvor_roditelj = nadji_roditelja(cvor, lista_cvorova)
             cvor_roditelj.dodaj_dijete(cvor)
 
-    korijen_stabla.ispisi_podstablo(korijen_stabla)
-    print(lista_cvorova[2].ime())
+    config.korijen = korijen_stabla
+    #korijen_stabla.ispisi_podstablo(korijen_stabla)
+    #print(lista_cvorova[2].ime())
 
 
 def nadji_roditelja(cvor, lista_cvorova):
