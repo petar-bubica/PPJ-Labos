@@ -1,3 +1,5 @@
+from CvorTablice import CvorTablice
+
 class CvorStabla:
 
     def __init__(self, podaci, dubina):
@@ -9,6 +11,8 @@ class CvorStabla:
         self.je_konstanta = False
         self.je_definiran = False
         self.je_u_petlji = False
+        self.ime = None
+        self.tip = None
 
     def __repr__(self):
         ispis = str(self.dubina) + ' ' + str(self.podaci)
@@ -29,13 +33,68 @@ class CvorStabla:
         for dijete in cvor.lista_djece:
             self.ispisi_podstablo(dijete)
 
-    def ime(self):
+
+    def vrati_ime(self):
         return self.podaci[1: -1]
+
+
+    def vrati_tipove(self, doseg):
+
+        if self.podaci.startswith('IDN'):
+            
+            cvor_tablice = doseg.copy()
+            
+            while cvor_tablice is not None:
+                for deklaracija in cvor_tablice.lista_deklaracija:
+                    if deklaracija.ime == self.vrati_ime():
+                        return deklaracija.vrati_tipove(None)
+                cvor_tablice = cvor_tablice.roditelj
+        
+        return self.lista_tipova
+
+
+    def vrati_tip(self, doseg):
+
+        if self.podaci.startswith('IDN'):
+
+            cvor_tablice = doseg.copy()
+            
+            while cvor_tablice is not None:
+                for deklaracija in cvor_tablice.lista_deklaracija:
+                    if deklaracija.ime == self.ime:
+                        return deklaracija.vrati_tip(None)
+                cvor_tablice = cvor_tablice.roditelj
+        
+        return self.tip
+
+    def postavi_tip(self, tip):
+        if self.tip == 'niz':
+            self.tip += tip
+        else:
+            self.tip = tip 
+
+
+    def vrati_l_vrijednost(self, doseg):
+        
+        if self.podaci.startswith('IDN'):
+            
+            cvor_tablice = doseg.copy()
+
+            while cvor_tablice is not None:
+                for deklaracija in cvor_tablice.lista_deklaracija:
+                    if deklaracija.vrati_ime() == self.ime:
+                        return deklaracija.vrati_tip(doseg) == 'int' or deklaracija.vrati_tip(doseg) == 'char' and not deklaracija.je_funkcija()
+
+    def je_funkcija(self):
+        if self.lista_tipova:
+            return True
+        return False
 
     def prikazi_djecu(self):
         for dijete in self.lista_djece:
             print(dijete.podaci, end=" ")
         return
+
 
     def prikazi_tipove(self):
         for tip in self.lista_tipova:
