@@ -1,3 +1,5 @@
+import config
+import PomocneFunkcije
 import Izrazi
 import NaredbenaStruktura
 from CvorStabla import CvorStabla
