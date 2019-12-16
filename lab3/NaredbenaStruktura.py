@@ -4,13 +4,21 @@ import Izrazi
 import Deklaracija_I_Funkcije
 from CvorStabla import CvorStabla
 from CvorTablice import CvorTablice
-
+#Nisam sig za ove postavi_tipove i to, provjeriti
 
 def slozena_naredba(cvor_stabla):
     return
 
 
 def lista_naredbi(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+       if naredba(cvor_stabla.lista_djece[0]) == None:
+           return
+    if lista_naredbi(cvor_stabla.lista_djece[0]) == None:
+        return
+    if naredba((cvor_stabla.lista_djece[1])) == None:
+        return
+
     return
 
 
@@ -19,6 +27,15 @@ def naredba(cvor_stabla):
 
 
 def izraz_naredba(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        cvor_stabla.tip = "int"
+    else:
+        if Izrazi.izraz(cvor_stabla.lista_djece[0]) == None:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+
     return
 
 

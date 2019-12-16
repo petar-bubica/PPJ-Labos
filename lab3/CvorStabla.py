@@ -5,6 +5,7 @@ class CvorStabla:
     def __init__(self, podaci, dubina):
         self.lista_djece = list()
         self.lista_tipova = list()
+        self.lista_imena = list()
         self.podaci = podaci.strip()
         self.dubina = dubina
         self.je_l_vrijednost = False
@@ -17,6 +18,12 @@ class CvorStabla:
     def __repr__(self):
         ispis = str(self.dubina) + ' ' + str(self.podaci)
         return ispis
+
+    def vrati_imena(self):
+        return self.lista_imena
+
+    def dodaj_ime(self,ime):
+        self.lista_imena.append(ime)
 
     def dodaj_dijete(self, cvor):
         if cvor is None:
@@ -66,6 +73,8 @@ class CvorStabla:
                 cvor_tablice = cvor_tablice.roditelj
         
         return self.tip
+
+
 
     def postavi_tip(self, tip):
         if self.tip == 'niz':
