@@ -1,11 +1,13 @@
 import config
 import sys
 
+
 def izracunaj_duljinu_znakova(cvor_stabla):
     while len(cvor_stabla.lista_djece) > 0:
         cvor_stabla = cvor_stabla.lista_djece[0]
 
     return (len(cvor_stabla.podaci.split(" ")) -2)
+
 
 def ide_u_niz_znakova(cvor_stabla):
     while len(cvor_stabla.lista_djece) > 0:
@@ -13,6 +15,7 @@ def ide_u_niz_znakova(cvor_stabla):
             return False
         cvor_stabla = cvor_stabla.lista_djece[0]
     return cvor_stabla.podaci.startswith("NIZ_ZNAKOVA")
+
 
 def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
     if len(cvor_stabla_1.vrati_tipove(config.doseg))!=len(cvor_stabla_2.vrati_tipove(config.doseg)):
@@ -22,11 +25,13 @@ def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
             return False
     return True
 
+
 def vrati_lokalnu_deklaraciju(ime):
     for deklaracija in config.doseg.lista_deklaracija:
         if deklaracija.ime == ime:
             return deklaracija
     return None
+
 
 def je_deklarirano_lokalno(ime):
     if len(config.doseg.lista_deklaracija) == 0: #Ona ima null
@@ -36,6 +41,7 @@ def je_deklarirano_lokalno(ime):
             return True
     return False
 
+
 def je_vec_deklarirano(ime):
     cvor_tablice = config.doseg
     while cvor_tablice != None:
@@ -44,6 +50,7 @@ def je_vec_deklarirano(ime):
                 return True
         cvor_tablice = cvor_tablice.roditelj
     return False
+
 
 def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
     prijasnji_cvor_tablice = cvor_tablice
@@ -56,6 +63,7 @@ def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
         cvor_tablice = cvor_tablice.roditelj
     return False
 
+
 def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
     while cvor_tablice.roditelj != None:
         cvor_tablice = cvor_tablice.roditelj
@@ -64,22 +72,28 @@ def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
             return True
     return False
 
+
 def je_castable(tip_1, tip_2):
     return tip_1 == tip_2 or (tip_1 == "char" and tip_2 == "int")
+
 
 def ispisi_error_poruku(cvor_stabla):
     print(cvor_stabla.podaci + " ::= " + cvor_stabla)
     config.error = True
     return
 
+
 def je_integer(x):
     return isinstance(x,int)
+
 
 def je_char(x):
     return (isinstance(x,str) and len(x)==1) #ona ima drugačije, nešto s //s
 
+
 def je_string(x):
     return isinstance(x,str) #isto ko gore
+
 
 def vrati_tip_trenutne_funkcije():
     cvor = config.doseg
