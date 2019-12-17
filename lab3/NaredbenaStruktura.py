@@ -12,13 +12,15 @@ def slozena_naredba(cvor_stabla):
 
 def lista_naredbi(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 1:
-       if naredba(cvor_stabla.lista_djece[0]) == None:
+       naredba(cvor_stabla.lista_djece[0])
+       if config.error:
            return
-    if lista_naredbi(cvor_stabla.lista_djece[0]) == None:
+    lista_naredbi(cvor_stabla.lista_djece[0])
+    if config.error:
         return
-    if naredba((cvor_stabla.lista_djece[1])) == None:
+    naredba((cvor_stabla.lista_djece[1]))
+    if config.error:
         return
-
     return
 
 
@@ -30,7 +32,8 @@ def izraz_naredba(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 1:
         cvor_stabla.tip = "int"
     else:
-        if Izrazi.izraz(cvor_stabla.lista_djece[0]) == None:
+        Izrazi.izraz(cvor_stabla.lista_djece[0])
+        if config.error:
             return
         cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)

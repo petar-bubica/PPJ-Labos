@@ -15,13 +15,16 @@ def deklaracija_parametara(cvor_stabla):
 
 def lista_parametara(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 1:
-        if deklaracija_parametara(cvor_stabla.lista_djece[0]) == None:
+        deklaracija_parametara(cvor_stabla.lista_djece[0])
+        if config.error:
             return
         cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
-        cvor_stabla.dodaj_ime(cvor_stabla.lista_djece[0].vrati_ime()) #ili funkcija??
-    if lista_parametara(cvor_stabla.lista_djece[0]) == None:
+        cvor_stabla.dodaj_ime(cvor_stabla.lista_djece[0].vrati_ime())
+    lista_parametara(cvor_stabla.lista_djece[0])
+    if config.error:
         return
-    if deklaracija_parametara(cvor_stabla.lista_djece[2]) == None:
+    deklaracija_parametara(cvor_stabla.lista_djece[2])
+    if config.error:
         return
     if cvor_stabla.lista_djece[2].ime in cvor_stabla.lista_djece[0].lista_imena:
         PomocneFunkcije.ispisi_error_poruku(cvor_stabla)

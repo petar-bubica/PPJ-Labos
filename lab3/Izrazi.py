@@ -72,19 +72,20 @@ def postfiks_izraz(cvor_stabla):
 
 def lista_argumenata(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 1:
-        if izraz_pridruzivanja(cvor_stabla.lista_djece[0]) == None:  # ili neki error
+        izraz_pridruzivanja(cvor_stabla.lista_djece[0])
+        if config.error:
             return
-        else:
-            cvor_stabla.postavi_tip(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
+        cvor_stabla.postavi_tip(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
     else:
-        if Deklaracija_I_Funkcije.lista_parametara(cvor_stabla.lista_djece[0]) == None:
+        Deklaracija_I_Funkcije.lista_argumenata(cvor_stabla.lista_djece[0])
+        if config.error:
             return
-        else:
-            if izraz_pridruzivanja(cvor_stabla.lista_djece[2]) == None:
+        izraz_pridruzivanja(cvor_stabla.lista_djece[2])
+        if config.error:
                 return
-            else:
-                cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
-                cvor_stabla.tip = cvor_stabla.listadjece[2].vrati_tip(config.doseg)
+
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        cvor_stabla.tip = cvor_stabla.listadjece[2].vrati_tip(config.doseg)
     return
 
 
