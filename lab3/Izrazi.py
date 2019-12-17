@@ -10,7 +10,7 @@ def primarni_izraz(cvor_stabla):
     cvor = cvor_stabla.lista_djece[0]
     
     if cvor.podaci.startswith('IDN'):
-        if PomocneFunkcije.je_vec_deklarirano(cvor.vrati_ime()):
+        if not PomocneFunkcije.je_vec_deklarirano(cvor.vrati_ime()):
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -57,15 +57,47 @@ def primarni_izraz(cvor_stabla):
 
 
 def postfiks_izraz(cvor_stabla):
-    cvor = cvor_stabla.lista_djece[0]
-
-    if cvor.podaci.startswith('<primarni_izraz>'):
+    if len(cvor_stabla.lista_djece) == 1:
         
-        primarni_izraz(cvor)
+        primarni_izraz(cvor_stabla)
         if config.error:
             return
 
-        ..
+        cvor_stabla.postavi_tip(cvor_stabla.vrati_tip(config.doseg))
+        cvor_stabla.lista_tipova = cvor_stabla.vrati_tipove(config.doseg)
+        cvor_stabla.ime = cvor_stabla.vrati_ime()
+        cvor_stabla.je_l_vrijednost = cvor_stabla.vrati_l_vrijednost(config.doseg)
+
+    if cvor_stabla.lista_djece[1].podaci.startswith('L_UGL_ZAGRADA'):
+
+        postfiks_izraz(cvor_stabla.lista_djece[1])
+        if config.error:
+            return
+
+        if not cvor_stabla.lista_djece[0].vrati_tip(config.doseg).startswith('niz'):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+
+        X = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[:3]
+        je_konstanta = cvor_stabla.lista_djece[0].je_konstanta
+        izraz(cvor_stabla.lista_djece[2])
+
+        if config.error:
+            return
+
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), 'int'):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+
+        cvor_stabla.postavi_tip(X)
+        cvor_stabla.je_l_vrijednost = not je_konstanta
+
+    if len(cvor_stabla.lista_djece) == 3:
+
+        postfiks_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+
+        if not cvor_stabla.lista_djece[0]
 
     return
 
