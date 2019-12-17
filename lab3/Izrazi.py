@@ -1,7 +1,7 @@
 import config
 import PomocneFunkcije
 import NaredbenaStruktura
-import Deklaracija_I_Funkcije
+import Deklaracije_I_Definicije
 from CvorStabla import CvorStabla
 from CvorTablice import CvorTablice
 

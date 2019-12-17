@@ -111,6 +111,20 @@ def deklaracija(cvor_stabla):
 
 
 def lista_init_deklaratora(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
+        init_deklarator(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+    else:
+        cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
+        lista_init_deklaratora(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.lista_djece[2].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
+        init_deklarator(cvor_stabla.lista_djece[2])
+        if config.error:
+            return
     return
 
 
@@ -123,8 +137,39 @@ def izravni_deklarator(cvor_stabla):
 
 
 def inicijalizator(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        Izrazi.izraz_pridruzivanja(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if PomocneFunkcije.ide_u_niz_znakova(cvor_stabla.lista_djece[0]):  # setarraysize ????
+            for i in range(PomocneFunkcije.izracunaj_duljinu_znakova(cvor_stabla)):
+                cvor_stabla.lista_tipova.append("char")
+        else:
+            cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
+    else:
+        lista_izraza_pridruzivanja(cvor_stabla.lista_djece[1])
+        if config.error:
+            return
+        # setarraysize???
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[1].vrati_tipove(config.doseg)
     return
 
 
 def lista_izraza_pridruzivanja(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        Izrazi.izraz_pridruzivanja(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.lista_tipova.append(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
+        # setarraysize ???
+    else:
+        lista_izraza_pridruzivanja(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        Izrazi.izraz_pridruzivanja(cvor_stabla.lista_djece[2])
+        if config.error:
+            return
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        cvor_stabla.lista_tipova.append(cvor_stabla.lista_djece[2].vrati_tip(config.doseg))
+        # setarraysize??
     return
