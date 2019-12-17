@@ -1,5 +1,5 @@
 import config
-import sys
+
 
 
 def izracunaj_duljinu_znakova(cvor_stabla):
@@ -28,7 +28,7 @@ def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
 
 def vrati_lokalnu_deklaraciju(ime):
     for deklaracija in config.doseg.lista_deklaracija:
-        if deklaracija.ime == ime:
+        if deklaracija.vrati_ime() == ime:
             return deklaracija
     return None
 
@@ -37,7 +37,7 @@ def je_deklarirano_lokalno(ime):
     if len(config.doseg.lista_deklaracija) == 0: #Ona ima null
         return False
     for deklaracija in config.doseg.lista_deklaracija:
-        if deklaracija.ime == ime:
+        if deklaracija.vrati_ime() == ime:
             return True
     return False
 
@@ -46,7 +46,7 @@ def je_vec_deklarirano(ime):
     cvor_tablice = config.doseg
     while cvor_tablice != None:
         for deklaracija in cvor_tablice.lista_deklaracija:
-            if deklaracija.ime == ime:
+            if deklaracija.vrati_ime() == ime:
                 return True
         cvor_tablice = cvor_tablice.roditelj
     return False
@@ -57,7 +57,7 @@ def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
     cvor_tablice = cvor_tablice.roditelj
     while cvor_tablice != None:
         for deklaracija in cvor_tablice.lista_deklaracija: #ona ima drukcije sa sys err
-            if deklaracija.je_funkcija() and deklaracija.ime == ime_funkcije:
+            if deklaracija.je_funkcija() and deklaracija.vrati_ime() == ime_funkcije:
                 return True
         prijasnji_cvor_tablice = cvor_tablice
         cvor_tablice = cvor_tablice.roditelj
@@ -68,7 +68,7 @@ def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
     while cvor_tablice.roditelj != None:
         cvor_tablice = cvor_tablice.roditelj
     for deklaracija in cvor_tablice.lista_deklaracija:
-        if deklaracija.je_funkcija() and deklaracija.ime == ime_funkcije and deklaracija.vrati_tip(config.doseg) == tip_funkcije:
+        if deklaracija.je_funkcija() and deklaracija.vrati_ime() == ime_funkcije and deklaracija.vrati_tip(config.doseg) == tip_funkcije:
             return True
     return False
 
@@ -101,7 +101,7 @@ def vrati_tip_trenutne_funkcije():
     while cvor != None:
         for deklaracija in cvor.lista_deklaracija.reverse():
             if deklaracija.je_funkcija():
-                print(deklaracija.ime)
+                print(deklaracija.vrati_ime())
                 return deklaracija.vrati_tip(config.doseg)
         cvor = cvor.roditelj
     return prazan_string

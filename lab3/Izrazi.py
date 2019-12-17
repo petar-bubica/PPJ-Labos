@@ -153,7 +153,7 @@ def lista_argumenata(cvor_stabla):
             return
         cvor_stabla.lista_tipova.append(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
     else:
-        Deklaracija_I_Funkcije.lista_argumenata(cvor_stabla.lista_djece[0])
+        Deklaracije_I_Definicije.lista_argumenata(cvor_stabla.lista_djece[0])
         if config.error:
             return
         izraz_pridruzivanja(cvor_stabla.lista_djece[2])

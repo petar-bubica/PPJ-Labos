@@ -1,7 +1,7 @@
 import config
 import PomocneFunkcije
 import Izrazi
-import Deklaracija_I_Funkcije
+import Deklaracije_I_Definicije
 from CvorStabla import CvorStabla
 from CvorTablice import CvorTablice
 
@@ -41,7 +41,7 @@ def slozena_naredba(cvor_stabla):
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[1].je_u_petlji = True
 
-        Deklaracija_I_Funkcije.lista_deklaracija(cvor_stabla.lista_djece[1])
+        Deklaracije_I_Definicije.lista_deklaracija(cvor_stabla.lista_djece[1])
         if config.error:
             return
 
@@ -99,7 +99,7 @@ def izraz_naredba(cvor_stabla):
         Izrazi.izraz(cvor_stabla.lista_djece[0])
         if config.error:
             return
-        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
 
@@ -156,7 +156,7 @@ def naredba_petlje(cvor_stabla):
         if config.error:
             return
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') || cvor_stabla.lista_djece[3].je_funkcija():
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[3].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -177,7 +177,7 @@ def naredba_petlje(cvor_stabla):
         if config.error:
             return
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') || cvor_stabla.lista_djece[3].je_funkcija():
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[3].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -239,11 +239,11 @@ def prijevodna_jedinica(cvor_stabla):
 
 def vanjska_deklaracija(cvor_stabla):
     if cvor_stabla.lista_djece[0].podaci == '<definicija_funkcije>':
-        Deklaracija_I_Funkcije.definicija_funkcije(cvor_stabla.lista_djece[0])
+        Deklaracije_I_Definicije.definicija_funkcije(cvor_stabla.lista_djece[0])
         if config.error:
             return
     else:
-        Deklaracija_I_Funkcije.deklaracija(cvor_stabla.lista_djece[0])
+        Deklaracije_I_Definicije.deklaracija(cvor_stabla.lista_djece[0])
         if config.error:
             return
     return
