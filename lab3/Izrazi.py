@@ -90,14 +90,56 @@ def lista_argumenata(cvor_stabla):
 
 
 def unarni_izraz(cvor_stabla):
-    return
-
-
-def unarni_operator(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        postfiks_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        cvor_stabla.je_l_vrijednost = cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg)
+    elif cvor_stabla.lista_djece[1] == "<unarni_izraz>":
+        unarni_izraz(cvor_stabla.lista_djece[1])
+        if config.error:
+            return
+        if not cvor_stabla.lista_djece[1].vrati_l_vrijednost(config.doseg) or not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[1].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
+    else:
+        cast_izraz(cvor_stabla.lista_djece[1])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[1].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def cast_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        unarni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_ime(config.doseg)
+        cvor_stabla.tipovi = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime
+        cvor_stabla.je_l_vrijednost = cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg)
+    else:
+        ime_tipa(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cast_izraz(cvor_stabla.lista_djece[3])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), cvor_stabla.lista_djece[1].vrati_tip(config.scope)) and not cvor_stabla.lista_djece[3].vrati_tip(config.doseg) == "int" and cvor_stabla.lista_djece[1].vrati_tip(config.doseg) == "char" or cvor_stabla.lista_djece[3].isFunction() or cvor_stabla.lista_djece[1].je_funkcija():
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[1].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
@@ -126,42 +168,252 @@ def specifikator_tipa(cvor_stabla):
 
 
 def multiplikativni_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        cast_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        multiplikativni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cast_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def aditivni_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        multiplikativni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        aditivni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        multiplikativni_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def odnosni_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        aditivni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        odnosni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        aditivni_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def jednakosni_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        odnosni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        jednakosni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        odnosni_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def bin_i_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        jednakosni_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        bin_i_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        jednakosni_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def bin_xili_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        bin_i_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        bin_xili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        bin_i_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def bin_ili_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        bin_xili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        bin_ili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        bin_xili_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def log_i_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        bin_ili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        log_i_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        bin_ili_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def log_ili_izraz(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        log_i_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        log_ili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[0].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        log_i_izraz(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), "int"):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = "int"
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
 def izraz_pridruzivanja(cvor_stabla):
+    if cvor_stabla.lista_djece.len() == 1:
+        log_ili_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost(cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg))
+    else:
+        postfiks_izraz(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        if not cvor_stabla.lista_djece[0].vrati_l_vrijednost(config.doseg):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        izraz_pridruzivanja(cvor_stabla.lista_djece[2]);
+        if config.doseg:
+            return
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), cvor_stabla.lista_djece[0].vrati_tip(config.doseg)):
+            PomocneFunkcije.ispisi_error_poruku()
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.je_l_vrijednost = False
     return
 
 
