@@ -5,7 +5,7 @@ import Deklaracija_I_Funkcije
 from CvorStabla import CvorStabla
 from CvorTablice import CvorTablice
 
-
+#Nisam sig za ove postavi_tipove i to, provjeriti
 def primarni_izraz(cvor_stabla):
     cvor = cvor_stabla.lista_djece[0]
     
@@ -71,6 +71,20 @@ def postfiks_izraz(cvor_stabla):
 
 
 def lista_argumenata(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        if izraz_pridruzivanja(cvor_stabla.lista_djece[0]) == None:  # ili neki error
+            return
+        else:
+            cvor_stabla.postavi_tip(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
+    else:
+        if Deklaracija_I_Funkcije.lista_parametara(cvor_stabla.lista_djece[0]) == None:
+            return
+        else:
+            if izraz_pridruzivanja(cvor_stabla.lista_djece[2]) == None:
+                return
+            else:
+                cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+                cvor_stabla.tip = cvor_stabla.listadjece[2].vrati_tip(config.doseg)
     return
 
 
@@ -87,10 +101,26 @@ def cast_izraz(cvor_stabla):
 
 
 def ime_tipa(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        specifikator_tipa(cvor_stabla.lista_djece[0])
+        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+    else:
+        specifikator_tipa(cvor_stabla.lista_djece[1])
+        if (cvor_stabla.lista_djece[1]).vrati_tip(config.doseg) == "void":
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.tip = cvor_stabla.lista_djece[1].vrati_tip(config.doseg)
+        cvor_stabla.je_konstanta = True
     return
 
-
 def specifikator_tipa(cvor_stabla):
+    cvor = cvor_stabla.lista_djece[0]
+    if cvor.podaci.startswith("KR VOID"):
+        cvor_stabla.tip = "void"
+    if cvor.podaci.startswith("KR CHAR"):
+        cvor_stabla.tip = "char"
+    if cvor.podaci.startswith("KR INT"):
+        cvor_stabla.tip = "int"
     return
 
 
