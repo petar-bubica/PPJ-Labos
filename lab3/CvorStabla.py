@@ -88,6 +88,7 @@ class CvorStabla:
             return True
         return False
 
+
     def prikazi_djecu(self):
         for dijete in self.lista_djece:
             print(dijete.podaci, end=" ")
