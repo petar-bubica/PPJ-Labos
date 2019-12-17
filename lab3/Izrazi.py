@@ -57,6 +57,16 @@ def primarni_izraz(cvor_stabla):
 
 
 def postfiks_izraz(cvor_stabla):
+    cvor = cvor_stabla.lista_djece[0]
+
+    if cvor.podaci.startswith('<primarni_izraz>'):
+        
+        primarni_izraz(cvor)
+        if config.error:
+            return
+
+        ..
+
     return
 
 
@@ -125,4 +135,28 @@ def izraz_pridruzivanja(cvor_stabla):
 
 
 def izraz(cvor_stabla):
+    cvor = cvor_stabla.lista_djece[0]
+
+    if cvor.podaci.startswith('<izraz_pridruzivanja>'):
+        
+        izraz_pridruzivanja(cvor)
+        if config.error:
+            return
+        
+        cvor_stabla.postavi_tip(cvor.vrati_tip(config.doseg))
+        cvor_stabla.je_l_vrijednost = cvor.je_l_vrijednost
+
+    if cvor.podaci.startswith('<izraz>'):
+
+        izraz(cvor)
+        if config.error:
+            return
+
+        izraz_pridruzivanja(cvor_stabla.lista_djece[2])
+        if config.error:
+            return
+        
+        cvor_stabla.postavi_tip(cvor_stabla.lista_djece[2].vrati_tip(config.doseg))
+        cvor_stabla.je_l_vrijednost = False
+
     return
