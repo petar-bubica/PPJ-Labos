@@ -1,5 +1,6 @@
 from CvorTablice import CvorTablice
 
+
 class CvorStabla:
 
     def __init__(self, podaci, dubina):
@@ -19,12 +20,6 @@ class CvorStabla:
         ispis = str(self.dubina) + ' ' + str(self.podaci)
         return ispis
 
-    def vrati_imena(self):
-        return self.lista_imena
-
-    def dodaj_ime(self,ime):
-        self.lista_imena.append(ime)
-
     def dodaj_dijete(self, cvor):
         if cvor is None:
             return
@@ -40,10 +35,8 @@ class CvorStabla:
         for dijete in cvor.lista_djece:
             self.ispisi_podstablo(dijete)
 
-
     def vrati_ime(self):
         return self.podaci[1: -1]
-
 
     def vrati_tipove(self, doseg):
 
@@ -59,7 +52,6 @@ class CvorStabla:
         
         return self.lista_tipova
 
-
     def vrati_tip(self, doseg):
 
         if self.podaci.startswith('IDN'):
@@ -74,14 +66,11 @@ class CvorStabla:
         
         return self.tip
 
-
-
     def postavi_tip(self, tip):
         if self.tip == 'niz':
             self.tip += tip
         else:
-            self.tip = tip 
-
+            self.tip = tip
 
     def vrati_l_vrijednost(self, doseg):
         
@@ -99,11 +88,11 @@ class CvorStabla:
             return True
         return False
 
+
     def prikazi_djecu(self):
         for dijete in self.lista_djece:
             print(dijete.podaci, end=" ")
         return
-
 
     def prikazi_tipove(self):
         for tip in self.lista_tipova:
