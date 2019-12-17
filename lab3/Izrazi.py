@@ -75,7 +75,7 @@ def lista_argumenata(cvor_stabla):
         izraz_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:
             return
-        cvor_stabla.postavi_tip(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
+        cvor_stabla.lista_tipova.append(cvor_stabla.lista_tipova[0].vrati_tip(config.doseg))
     else:
         Deklaracija_I_Funkcije.lista_argumenata(cvor_stabla.lista_djece[0])
         if config.error:
@@ -85,7 +85,7 @@ def lista_argumenata(cvor_stabla):
                 return
 
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
-        cvor_stabla.tip = cvor_stabla.listadjece[2].vrati_tip(config.doseg)
+        cvor_stabla.lista_tipova.append(cvor_stabla.listadjece[2].vrati_tip(config.doseg))
     return
 
 
@@ -104,24 +104,24 @@ def cast_izraz(cvor_stabla):
 def ime_tipa(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 1:
         specifikator_tipa(cvor_stabla.lista_djece[0])
-        cvor_stabla.tip = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)
+        cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
     else:
         specifikator_tipa(cvor_stabla.lista_djece[1])
         if (cvor_stabla.lista_djece[1]).vrati_tip(config.doseg) == "void":
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
-        cvor_stabla.tip = cvor_stabla.lista_djece[1].vrati_tip(config.doseg)
+        cvor_stabla.postavi_tip(cvor_stabla.lista_djece[1].vrati_tip(config.doseg))
         cvor_stabla.je_konstanta = True
     return
 
 def specifikator_tipa(cvor_stabla):
     cvor = cvor_stabla.lista_djece[0]
     if cvor.podaci.startswith("KR VOID"):
-        cvor_stabla.tip = "void"
+        cvor_stabla.postavi_tip("void")
     if cvor.podaci.startswith("KR CHAR"):
-        cvor_stabla.tip = "char"
+        cvor_stabla.postavi_tip("char")
     if cvor.podaci.startswith("KR INT"):
-        cvor_stabla.tip = "int"
+        cvor_stabla.postavi_tip("int")
     return
 
 
