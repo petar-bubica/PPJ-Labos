@@ -26,6 +26,9 @@ class CvorStabla:
         cvor.dubina = self.dubina + 1
         self.lista_djece.append(cvor)
 
+    def dodaj_ime(self,ime):
+        self.lista_imena.append(ime)
+
     def ispisi_podstablo(self, cvor):
         print(cvor.podaci, cvor.lista_djece)
 
