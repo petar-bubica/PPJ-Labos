@@ -76,6 +76,7 @@ def postfiks_izraz(cvor_stabla):
 
         if not cvor_stabla.lista_djece[0].vrati_tip(config.doseg).startswith('niz'):
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
 
         X = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[:3]
         je_konstanta = cvor_stabla.lista_djece[0].je_konstanta
@@ -90,6 +91,7 @@ def postfiks_izraz(cvor_stabla):
 
         cvor_stabla.postavi_tip(X)
         cvor_stabla.je_l_vrijednost = not je_konstanta
+        return #ona ima return
 
     if len(cvor_stabla.lista_djece) == 3:
 
@@ -113,6 +115,9 @@ def postfiks_izraz(cvor_stabla):
 
         lista_argumenata(cvor_stabla.lista_djece[2])
         if config.error:
+            return
+        if not cvor_stabla.lista_djece[0].je_funkcija():
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
         p_izraz = cvor_stabla.lista_djece[0]
@@ -234,11 +239,11 @@ def ime_tipa(cvor_stabla):
 
 def specifikator_tipa(cvor_stabla):
     cvor = cvor_stabla.lista_djece[0]
-    if cvor.podaci.startswith("KR VOID"):
+    if cvor.podaci.startswith("KR_VOID"):
         cvor_stabla.postavi_tip("void")
-    if cvor.podaci.startswith("KR CHAR"):
+    if cvor.podaci.startswith("KR_CHAR"):
         cvor_stabla.postavi_tip("char")
-    if cvor.podaci.startswith("KR INT"):
+    if cvor.podaci.startswith("KR_INT"):
         cvor_stabla.postavi_tip("int")
     return
 

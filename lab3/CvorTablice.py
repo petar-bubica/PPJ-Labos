@@ -4,3 +4,4 @@ class CvorTablice:
         self.roditelj = roditelj
         self.je_u_petlji = None
         self.lista_deklaracija = list()
+    #dodaj dijete funkcija?

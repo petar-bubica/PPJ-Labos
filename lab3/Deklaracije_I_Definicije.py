@@ -129,10 +129,86 @@ def lista_init_deklaratora(cvor_stabla):
 
 
 def init_deklarator(cvor_stabla):
+    cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
+    if cvor_stabla.je_konstanta:
+        cvor_stabla.lista_djece[0].je_konstanta = True
+    if cvor_stabla.je_u_petlji:
+        cvor_stabla.lista_djece[0].je_u_petlji = True
+    izravni_deklarator(cvor_stabla.lista_djece[0])
+    if config.error:
+        return
+    if len(cvor_stabla.lista_djece) ==1:
+        if cvor_stabla.lista_djece[0].je_konstanta:
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+    else:
+        inicijalizator(cvor_stabla.lista_djece[2])
+        if config.error:
+            return
+        if cvor_stabla.lista_djece[0].tip.startswith("niz"):
+            if len(cvor_stabla.lista_djece[0].lista_djece) < len(cvor_stabla.lista_djece[2].lista_djece):
+                config.error = True
+            for tip in cvor_stabla.lista_djece[2].vrati_tipove(config.doseg):
+                if not PomocneFunkcije.je_castable(tip,cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[:3]):
+                    config.error = True
+            if config.error:
+                PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+                return
+        else:
+            if PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg),cvor_stabla.lista_djece[0].vrati_tip(config.doseg)) or cvor_stabla.lista_djece[2].je_funkcija():
+                PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+                return
     return
 
 
 def izravni_deklarator(cvor_stabla):
+    if len(cvor_stabla.lista_djece) == 1:
+        if cvor_stabla.vrati_tip(config.doseg) == "void" or PomocneFunkcije.je_deklarirano_lokalno(cvor_stabla.lista_djece[0].vrati_ime()):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.je_definiran = True
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        config.doseg.dodaj_dijete(cvor_stabla) #nema te fje?
+        return
+    if cvor_stabla.lista_djece[2].podaci.startswith("BROJ"):
+        if cvor_stabla.vrati_tip(config.doseg) == "void" or PomocneFunkcije.je_deklarirano_lokalno(cvor_stabla.vrati_ime()):
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        if cvor_stabla.lista_djece[2].dohvati_vrijednost_broja() <=0 or cvor_stabla.lista_djece[2].dohvati_vrijednost_broja() > 1024:
+            PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+            return
+        cvor_stabla.postavi_tip("niz" + cvor_stabla.vrati_tip(config.doseg))
+        #setarraysize ???
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        config.doseg.dodaj_dijete(cvor_stabla)
+    if cvor_stabla.lista_djece[2].podaci.startswith("KR_VOID"):
+        lokalna_deklaracija = PomocneFunkcije.vrati_lokalnu_deklaraciju(cvor_stabla.lista_djece[0].vrati_ime())
+        if lokalna_deklaracija == None:
+            cvor_stabla.lista_tipova.append("void")
+            cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+            deklarirane_funkcije.append(cvor_stabla.vrati_ime())
+        else:
+             if len(lokalna_deklaracija.vrati_tipove(config.doseg)) != 1 or not (lokalna_deklaracija.lista_tipova[0] == "void"):
+                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+                 return
+             cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+             cvor_stabla.lista_tipova.append("void")
+    if cvor_stabla.lista_djece[2].podaci == "<lista_parametara>":
+        lista_parametara(cvor_stabla.lista_djece[2])
+        if config.error:
+            return
+        lokalna_deklaracija = PomocneFunkcije.vrati_lokalnu_deklaraciju(cvor_stabla.lista_djece[0].vrati_ime())
+        if lokalna_deklaracija != None:
+            if not PomocneFunkcije.provjeri_tipove(lokalna_deklaracija,cvor_stabla.lista_djece[2]):
+                PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
+                return
+            cvor_stabla.lista_tipova = cvor_stabla.lista_djece[2].vrati_tipove(config.doseg)
+            cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[2].vrati_tipove(config.doseg)
+        deklarirane_funkcije.append(cvor_stabla.vrati_ime())
+        config.doseg.dodaj_dijete(cvor_stabla)
     return
 
 

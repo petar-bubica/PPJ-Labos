@@ -1,7 +1,5 @@
 import config
 
-
-
 def izracunaj_duljinu_znakova(cvor_stabla):
     while len(cvor_stabla.lista_djece) > 0:
         cvor_stabla = cvor_stabla.lista_djece[0]
