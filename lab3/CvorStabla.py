@@ -9,6 +9,7 @@ class CvorStabla:
         self.lista_imena = list()
         self.podaci = podaci.strip()
         self.dubina = dubina
+        self.velicina_niza = -1
         self.je_l_vrijednost = False
         self.je_konstanta = False
         self.je_definiran = False
@@ -19,6 +20,16 @@ class CvorStabla:
     def __repr__(self):
         ispis = str(self.dubina) + ' ' + str(self.podaci)
         return ispis
+
+    def __str__(self):
+        result = ""
+        for cvor_dijete in self.lista_djece:
+            if cvor_dijete.podaci[0] != '<':
+                niz = cvor_dijete.podaci.split(' ')
+                result += niz[0] + '(' + niz[1] + ',' + niz[2] + ')' + " "
+            else:
+                result += cvor_dijete.podaci + " "
+        return result
 
     def dodaj_dijete(self, cvor):
         if cvor is None:
@@ -91,6 +102,11 @@ class CvorStabla:
             return True
         return False
 
+    def dohvati_vrijednost_broja(self):
+        niz = self.podaci.split(' ')
+        if len(niz) > 4:
+            return 1000000000
+        return int(niz[2])
 
     def prikazi_djecu(self):
         for dijete in self.lista_djece:

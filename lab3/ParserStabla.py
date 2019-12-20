@@ -34,7 +34,6 @@ def parsiraj():
 
     config.korijen = korijen_stabla
     #korijen_stabla.ispisi_podstablo(korijen_stabla)
-    #print(lista_cvorova[2].ime())
 
 
 def nadji_roditelja(cvor, lista_cvorova):

@@ -9,7 +9,7 @@ from CvorTablice import CvorTablice
 def slozena_naredba(cvor_stabla):
 
     kopija_dosega = CvorTablice(config.doseg.roditelj)
-    kopija_dosega.lista_deklaracija = config.doseg.lista_deklaracija()
+    kopija_dosega.lista_deklaracija = config.doseg.lista_deklaracija
 
     if config.doseg.je_u_petlji:
         kopija_dosega.je_u_petlji = True
@@ -58,12 +58,13 @@ def lista_naredbi(cvor_stabla):
        naredba(cvor_stabla.lista_djece[0])
        if config.error:
            return
-    lista_naredbi(cvor_stabla.lista_djece[0])
-    if config.error:
-        return
-    naredba((cvor_stabla.lista_djece[1]))
-    if config.error:
-        return
+    elif len(cvor_stabla.lista_djece) > 1:
+        lista_naredbi(cvor_stabla.lista_djece[0])
+        if config.error:
+            return
+        naredba((cvor_stabla.lista_djece[1]))
+        if config.error:
+            return
     return
 
 
@@ -227,7 +228,7 @@ def prijevodna_jedinica(cvor_stabla):
         vanjska_deklaracija(cvor_stabla.lista_djece[0])
         if config.error:
             return
-    else:
+    elif len(cvor_stabla.lista_djece) > 1:
         prijevodna_jedinica(cvor_stabla.lista_djece[0])
         if config.error:
             return
