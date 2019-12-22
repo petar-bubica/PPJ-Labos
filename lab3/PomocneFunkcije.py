@@ -1,14 +1,16 @@
 import config
+import copy
+
 
 def izracunaj_duljinu_znakova(cvor_stabla):
-    while len(cvor_stabla.lista_djece) > 0:
+    while cvor_stabla.lista_djece:
         cvor_stabla = cvor_stabla.lista_djece[0]
 
-    return (len(cvor_stabla.podaci.split(" ")) -2)
+    return len(cvor_stabla.podaci.split(" ")[2]) - 2
 
 
 def ide_u_niz_znakova(cvor_stabla):
-    while len(cvor_stabla.lista_djece) > 0:
+    while cvor_stabla.lista_djece:
         if len(cvor_stabla.lista_djece) != 1:
             return False
         cvor_stabla = cvor_stabla.lista_djece[0]
@@ -16,10 +18,10 @@ def ide_u_niz_znakova(cvor_stabla):
 
 
 def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
-    if len(cvor_stabla_1.vrati_tipove(config.doseg))!=len(cvor_stabla_2.vrati_tipove(config.doseg)):
+    if len(cvor_stabla_1.vrati_tipove(config.doseg)) != len(cvor_stabla_2.vrati_tipove(config.doseg)):
         return False
     for i in range(len(cvor_stabla_1.vrati_tipove(config.doseg))):
-        if cvor_stabla_1.lista_tipova[i] == cvor_stabla_2.lista_tipova[i]:
+        if cvor_stabla_1.lista_tipova[i] != cvor_stabla_2.lista_tipova[i]:
             return False
     return True
 
@@ -41,8 +43,9 @@ def je_deklarirano_lokalno(ime):
 
 
 def je_vec_deklarirano(ime):
+    # cvor_tablice = config.doseg.deepcopy()
     cvor_tablice = config.doseg
-    while cvor_tablice != None:
+    while cvor_tablice is not None:
         for deklaracija in cvor_tablice.lista_deklaracija:
             if deklaracija.vrati_ime() == ime:
                 return True
@@ -60,7 +63,7 @@ def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
 
 
 def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
-    while cvor_tablice.roditelj != None:
+    while cvor_tablice.roditelj is not None:
         cvor_tablice = cvor_tablice.roditelj
     for deklaracija in cvor_tablice.lista_deklaracija:
         if deklaracija.je_funkcija() and deklaracija.vrati_ime() == ime_funkcije and deklaracija.vrati_tip(config.doseg) != tip_funkcije:
@@ -99,6 +102,7 @@ def je_string(x):
 
 
 def vrati_tip_trenutne_funkcije():
+
     cvor = config.doseg
     prazan_string = ""
     while cvor is not None:

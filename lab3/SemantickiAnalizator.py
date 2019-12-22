@@ -1,9 +1,14 @@
+# LAB3 EDITION
+# [najseksi PPJ ekipa + Dora Franjic]
+
 import config
 import ParserStabla
 import NaredbenaStruktura
 
+
 def analiziraj():
     NaredbenaStruktura.prijevodna_jedinica(config.korijen)
+
 
 def funkcijski_error():
     set_definicija = set(config.definirane_funkcije)
@@ -12,6 +17,7 @@ def funkcijski_error():
     if set_definicija == set_deklaracija:
         return False
     return True
+
 
 ParserStabla.parsiraj()
 analiziraj()

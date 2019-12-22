@@ -1,4 +1,5 @@
 from CvorTablice import CvorTablice
+import config
 
 
 class CvorStabla:
@@ -7,7 +8,7 @@ class CvorStabla:
         self.lista_djece = list()
         self.lista_tipova = list()
         self.lista_imena = list()
-        self.podaci = podaci.strip()
+        self.podaci = str(podaci).strip()
         self.dubina = dubina
         self.velicina_niza = -1
         self.je_l_vrijednost = False
@@ -50,14 +51,18 @@ class CvorStabla:
             self.ispisi_podstablo(dijete)
 
     def vrati_ime(self):
-        return self.podaci[1: -1]
+        print(self.podaci)
+        if self.podaci[0] != '<':
+            return self.podaci.split(' ')[2]
+        return self.ime
 
     def vrati_tipove(self, doseg):
 
         if self.podaci.startswith('IDN'):
-            
-            cvor_tablice = doseg.copy()
-            
+
+            cvor_tablice = CvorTablice(config.doseg.roditelj)
+            cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
+
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
                     if deklaracija.ime == self.vrati_ime():
@@ -70,7 +75,8 @@ class CvorStabla:
 
         if self.podaci.startswith('IDN'):
 
-            cvor_tablice = doseg.copy()
+            cvor_tablice = CvorTablice(config.doseg.roditelj)
+            cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
             
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
@@ -89,8 +95,9 @@ class CvorStabla:
     def vrati_l_vrijednost(self, doseg):
         
         if self.podaci.startswith('IDN'):
-            
-            cvor_tablice = doseg.copy()
+
+            cvor_tablice = CvorTablice(config.doseg.roditelj)
+            cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
 
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
