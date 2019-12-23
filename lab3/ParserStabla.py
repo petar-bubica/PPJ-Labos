@@ -4,6 +4,7 @@ from CvorStabla import CvorStabla
 
 
 def parsiraj():
+    print("U parsiraj metodi")
     ulaz = sys.stdin.read().splitlines()
 
     korijen_stabla = CvorStabla(ulaz[0], 0)
@@ -37,6 +38,7 @@ def parsiraj():
 
 
 def nadji_roditelja(cvor, lista_cvorova):
+    print("U nadi roditelje metodi")
     zapamti = None
 
     for cvor_roditelj in lista_cvorova:

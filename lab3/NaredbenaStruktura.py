@@ -7,6 +7,7 @@ from CvorTablice import CvorTablice
 
 
 def slozena_naredba(cvor_stabla):
+    print("U slozena naredba metodi")
 
     kopija_dosega = CvorTablice(config.doseg.roditelj)
     kopija_dosega.lista_deklaracija = config.doseg.lista_deklaracija
@@ -54,6 +55,7 @@ def slozena_naredba(cvor_stabla):
 
 
 def lista_naredbi(cvor_stabla):
+    print("U lista naredbi metodi")
     if len(cvor_stabla.lista_djece) == 1:
        naredba(cvor_stabla.lista_djece[0])
        if config.error:
@@ -69,6 +71,7 @@ def lista_naredbi(cvor_stabla):
 
 
 def naredba(cvor_stabla):
+    print("U naredba metodi")
 
     desna_strana = cvor_stabla.lista_djece[0]
     if cvor_stabla.je_u_petlji:
@@ -94,6 +97,7 @@ def naredba(cvor_stabla):
 
 
 def izraz_naredba(cvor_stabla):
+    print("U izraz naredba metodi")
     if len(cvor_stabla.lista_djece) == 1:
         cvor_stabla.postavi_tip("int")
     else:
@@ -108,6 +112,7 @@ def izraz_naredba(cvor_stabla):
 
 
 def naredba_grananja(cvor_stabla):
+    print("U naredba grananja metodi")
 
     Izrazi.izraz(cvor_stabla.lista_djece[2])
     if config.error:
@@ -130,6 +135,7 @@ def naredba_grananja(cvor_stabla):
 
 
 def naredba_petlje(cvor_stabla):
+    print("U naredba petlje metodi")
 
     if len(cvor_stabla.lista_djece) == 5:
 
@@ -195,6 +201,7 @@ def naredba_petlje(cvor_stabla):
 
 
 def naredba_skoka(cvor_stabla):
+    print("U naredba skoka metodi")
 
     if len(cvor_stabla.lista_djece) == 3:
 
@@ -222,6 +229,7 @@ def naredba_skoka(cvor_stabla):
 
 
 def prijevodna_jedinica(cvor_stabla):
+    print("U prijevodna jedinica metodi")
     if len(cvor_stabla.lista_djece) == 1:
         vanjska_deklaracija(cvor_stabla.lista_djece[0])
         if config.error:
@@ -237,6 +245,7 @@ def prijevodna_jedinica(cvor_stabla):
 
 
 def vanjska_deklaracija(cvor_stabla):
+    print("U vanjska deklaracija metodi")
     if cvor_stabla.lista_djece[0].podaci == '<definicija_funkcije>':
         Deklaracije_I_Definicije.definicija_funkcije(cvor_stabla.lista_djece[0])
         if config.error:
