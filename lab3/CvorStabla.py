@@ -63,9 +63,11 @@ class CvorStabla:
             cvor_tablice = CvorTablice(config.doseg.roditelj)
             cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
 
+            #cvor_tablice = doseg  --->  mozda
+
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
-                    if deklaracija.ime == self.vrati_ime():
+                    if deklaracija.vrati_ime() == self.vrati_ime():   #promjena
                         return deklaracija.vrati_tipove(None)
                 cvor_tablice = cvor_tablice.roditelj
         
@@ -77,10 +79,12 @@ class CvorStabla:
 
             cvor_tablice = CvorTablice(config.doseg.roditelj)
             cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
+
+            # cvor_tablice = doseg  --->  mozda
             
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
-                    if deklaracija.ime == self.ime:
+                    if deklaracija.vrati_ime() == self.vrati_ime():   #promjena
                         return deklaracija.vrati_tip(None)
                 cvor_tablice = cvor_tablice.roditelj
         
@@ -99,9 +103,11 @@ class CvorStabla:
             cvor_tablice = CvorTablice(config.doseg.roditelj)
             cvor_tablice.lista_deklaracija = config.doseg.lista_deklaracija
 
+            # cvor_tablice = doseg  --->  mozda
+
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
-                    if deklaracija.vrati_ime() == self.ime:
+                    if deklaracija.vrati_ime() == self.vrati_ime():   #promjena
                         return deklaracija.vrati_tip(doseg) == 'int' or deklaracija.vrati_tip(doseg) == 'char' and not deklaracija.je_funkcija()
 
     def je_funkcija(self):
