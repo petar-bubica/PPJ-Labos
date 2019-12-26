@@ -25,6 +25,7 @@ def definicija_funkcije(cvor_stabla):
         cvor_stabla.lista_tipova.append("void")
         if cvor_stabla.vrati_ime() == "main" and cvor_stabla.vrati_tip(config.doseg) == "int":
             config.nema_main = False
+        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         config.definirane_funkcije.append(cvor_stabla.vrati_ime())
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
@@ -45,6 +46,7 @@ def definicija_funkcije(cvor_stabla):
         cvor_stabla.lista_djece[5].lista_imena = cvor_stabla.lista_djece[3].lista_imena
         cvor_stabla.lista_imena = cvor_stabla.lista_djece[3].lista_imena
         config.definirane_funkcije.append(cvor_stabla.vrati_ime())
+        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
         if config.error:
@@ -194,8 +196,9 @@ def izravni_deklarator(cvor_stabla):
         if cvor_stabla.vrati_tip(config.doseg) == "void" or PomocneFunkcije.je_deklarirano_lokalno(cvor_stabla.lista_djece[0].vrati_ime()):
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
-        cvor_stabla.je_definiran = True
+        cvor_stabla.je_definiran = False
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         return
     elif cvor_stabla.lista_djece[2].podaci.startswith("BROJ"):
@@ -208,16 +211,18 @@ def izravni_deklarator(cvor_stabla):
         cvor_stabla.postavi_tip("niz" + cvor_stabla.vrati_tip(config.doseg))
         cvor_stabla.velicina_niza = cvor_stabla.lista_djece[2].dohvati_vrijednost_broja()
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
     elif cvor_stabla.lista_djece[2].podaci.startswith("KR_VOID"):
         lokalna_deklaracija = PomocneFunkcije.vrati_lokalnu_deklaraciju(cvor_stabla.lista_djece[0].vrati_ime())
         if lokalna_deklaracija is None:
             cvor_stabla.lista_tipova.append("void")
             cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+            print('doseg.lista dekl:', config.doseg.lista_deklaracija)
             config.doseg.lista_deklaracija.append(cvor_stabla)
             config.deklarirane_funkcije.append(cvor_stabla.vrati_ime())
         else:
-             if len(lokalna_deklaracija.vrati_tipove(config.doseg)) != 1 or not (lokalna_deklaracija.lista_tipova[0] == "void"):
+             if len(lokalna_deklaracija.vrati_tipove(config.doseg)) != 1 or lokalna_deklaracija.lista_tipova[0] != "void":
                  PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
                  return
              cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
@@ -237,6 +242,7 @@ def izravni_deklarator(cvor_stabla):
             cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
             cvor_stabla.lista_tipova = cvor_stabla.lista_djece[2].vrati_tipove(config.doseg)
             config.deklarirane_funkcije.append(cvor_stabla.vrati_ime())
+            print('doseg.lista dekl:', config.doseg.lista_deklaracija)
             config.doseg.lista_deklaracija.append(cvor_stabla)
     return
 

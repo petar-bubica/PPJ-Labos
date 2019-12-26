@@ -48,8 +48,7 @@ def je_deklarirano_lokalno(ime):
 
 
 def je_vec_deklarirano(ime):
-    print("U je vec deklarirano metodi")
-    # cvor_tablice = config.doseg.deepcopy()
+    print("U je vec deklarirano metodi", ime)
     cvor_tablice = config.doseg
     while cvor_tablice is not None:
         for deklaracija in cvor_tablice.lista_deklaracija:
@@ -80,7 +79,7 @@ def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
 
 
 def je_castable(tip_1, tip_2):
-    print("U je castable metodi")
+    print("U je castable metodi", tip_1, tip_2)
     return tip_1 == tip_2 or (tip_1 == "char" and tip_2 == "int")
 
 
@@ -122,8 +121,9 @@ def vrati_tip_trenutne_funkcije():
     while cvor is not None:
         if cvor.lista_deklaracija:
             reverzna_lista_deklaracija = list(reversed(cvor.lista_deklaracija))
+            #print(reverzna_lista_deklaracija)
             for deklaracija in reverzna_lista_deklaracija:
                 if deklaracija.je_funkcija() and deklaracija.je_definiran:
                     return deklaracija.vrati_tip(cvor)
-        cvor = cvor.roditelj
+            cvor = cvor.roditelj
     return prazan_string

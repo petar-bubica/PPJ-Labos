@@ -24,14 +24,15 @@ def slozena_naredba(cvor_stabla):
         config.doseg.je_u_petlji = True
 
     for i in range(len(cvor_stabla.vrati_tipove(config.doseg))):
+        novi_cvor = CvorStabla('<' + cvor_stabla.lista_imena[i], -1)
 
-        novi_cvor = CvorStabla(-1, '<' + cvor_stabla.lista_imena[i])
         novi_cvor.postavi_tip(cvor_stabla.vrati_tipove(config.doseg)[i])
 
         if cvor_stabla.je_u_petlji:
             novi_cvor.je_u_petlji = True
 
         novi_cvor.ime = cvor_stabla.lista_imena[i]
+        print(str(novi_cvor))
         config.doseg.lista_deklaracija.append(novi_cvor)
 
     if len(cvor_stabla.lista_djece) == 3:
@@ -41,7 +42,7 @@ def slozena_naredba(cvor_stabla):
     else:
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[1].je_u_petlji = True
-
+        
         Deklaracije_I_Definicije.lista_deklaracija(cvor_stabla.lista_djece[1])
         if config.error:
             return
@@ -118,7 +119,7 @@ def naredba_grananja(cvor_stabla):
     if config.error:
         return
 
-    if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), 'int') or len(cvor_stabla.lista_djece[2].lista_tipova) != 0:
+    if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[2].je_funkcija():
         PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
         return
 
@@ -143,7 +144,7 @@ def naredba_petlje(cvor_stabla):
         if config.error:
             return
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), 'int') or len(cvor_stabla.lista_djece[2].lista_tipova) != 0:
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[2].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -163,7 +164,7 @@ def naredba_petlje(cvor_stabla):
         if config.error:
             return
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or len(cvor_stabla.lista_djece[3].lista_tipova) != 0:
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[3].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -183,7 +184,7 @@ def naredba_petlje(cvor_stabla):
         if config.error:
             return
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or len(cvor_stabla.lista_djece[3].lista_tipova) != 0:
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[3].vrati_tip(config.doseg), 'int') or cvor_stabla.lista_djece[3].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
@@ -211,7 +212,7 @@ def naredba_skoka(cvor_stabla):
 
         tip = PomocneFunkcije.vrati_tip_trenutne_funkcije()
 
-        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[1].vrati_tip(config.doseg), tip) or len(cvor_stabla.lista_djece[1].lista_tipova) != 0:
+        if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[1].vrati_tip(config.doseg), tip) or cvor_stabla.lista_djece[1].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
