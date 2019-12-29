@@ -7,7 +7,7 @@ from CvorTablice import CvorTablice
 
 
 def definicija_funkcije(cvor_stabla):
-    print("U definicija funkcije metodi")
+    #print("U definicija funkcije metodi")
     Izrazi.ime_tipa(cvor_stabla.lista_djece[0])
     if cvor_stabla.lista_djece[0].je_konstanta:
         PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
@@ -25,7 +25,7 @@ def definicija_funkcije(cvor_stabla):
         cvor_stabla.lista_tipova.append("void")
         if cvor_stabla.vrati_ime() == "main" and cvor_stabla.vrati_tip(config.doseg) == "int":
             config.nema_main = False
-        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+        #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         config.definirane_funkcije.append(cvor_stabla.vrati_ime())
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
@@ -46,7 +46,7 @@ def definicija_funkcije(cvor_stabla):
         cvor_stabla.lista_djece[5].lista_imena = cvor_stabla.lista_djece[3].lista_imena
         cvor_stabla.lista_imena = cvor_stabla.lista_djece[3].lista_imena
         config.definirane_funkcije.append(cvor_stabla.vrati_ime())
-        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+        #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
         if config.error:
@@ -55,7 +55,7 @@ def definicija_funkcije(cvor_stabla):
 
 
 def deklaracija_parametara(cvor_stabla):
-    print("U deklaracija parametara metodi")
+    #print("U deklaracija parametara metodi")
     Izrazi.ime_tipa(cvor_stabla.lista_djece[0])
     if config.error:
         return
@@ -71,7 +71,7 @@ def deklaracija_parametara(cvor_stabla):
 
 
 def lista_parametara(cvor_stabla):
-    print("U lista parametara metodi")
+    #print("U lista parametara metodi")
     if len(cvor_stabla.lista_djece) == 1:
         deklaracija_parametara(cvor_stabla.lista_djece[0])
         if config.error:
@@ -96,7 +96,7 @@ def lista_parametara(cvor_stabla):
 
 
 def lista_deklaracija(cvor_stabla):
-    print("U lista deklaracija metodi")
+    #print("U lista deklaracija metodi")
     if len(cvor_stabla.lista_djece) == 1:
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[0].je_u_petlji = True
@@ -111,7 +111,7 @@ def lista_deklaracija(cvor_stabla):
 
 
 def deklaracija(cvor_stabla):
-    print("U deklaracija metodi")
+    #print("U deklaracija metodi")
     Izrazi.ime_tipa(cvor_stabla.lista_djece[0])
     if config.error:
         return
@@ -125,7 +125,7 @@ def deklaracija(cvor_stabla):
 
 
 def lista_init_deklaratora(cvor_stabla):
-    print("U lista init deklaratora metodi")
+    #print("U lista init deklaratora metodi")
     if len(cvor_stabla.lista_djece) == 1:
         cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
         if cvor_stabla.je_konstanta:
@@ -157,7 +157,7 @@ def lista_init_deklaratora(cvor_stabla):
 
 
 def init_deklarator(cvor_stabla):
-    print("U init deklarator metodi")
+    #print("U init deklarator metodi")
     cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
     if cvor_stabla.je_konstanta:
         cvor_stabla.lista_djece[0].je_konstanta = True
@@ -178,7 +178,7 @@ def init_deklarator(cvor_stabla):
             if cvor_stabla.lista_djece[0].velicina_niza <= cvor_stabla.lista_djece[2].velicina_niza:
                 config.error = True
             for tip in cvor_stabla.lista_djece[2].vrati_tipove(config.doseg):
-                if not PomocneFunkcije.je_castable(tip, cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[:3]):
+                if not PomocneFunkcije.je_castable(tip, cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[3:]):
                     config.error = True
             if config.error:
                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
@@ -191,14 +191,14 @@ def init_deklarator(cvor_stabla):
 
 
 def izravni_deklarator(cvor_stabla):
-    print("U izravni deklarator metodi")
+    #print("U izravni deklarator metodi")
     if len(cvor_stabla.lista_djece) == 1:
         if cvor_stabla.vrati_tip(config.doseg) == "void" or PomocneFunkcije.je_deklarirano_lokalno(cvor_stabla.lista_djece[0].vrati_ime()):
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
         cvor_stabla.je_definiran = False
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
-        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+        #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         return
     elif cvor_stabla.lista_djece[2].podaci.startswith("BROJ"):
@@ -211,14 +211,14 @@ def izravni_deklarator(cvor_stabla):
         cvor_stabla.postavi_tip("niz" + cvor_stabla.vrati_tip(config.doseg))
         cvor_stabla.velicina_niza = cvor_stabla.lista_djece[2].dohvati_vrijednost_broja()
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
-        print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+        #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
     elif cvor_stabla.lista_djece[2].podaci.startswith("KR_VOID"):
         lokalna_deklaracija = PomocneFunkcije.vrati_lokalnu_deklaraciju(cvor_stabla.lista_djece[0].vrati_ime())
         if lokalna_deklaracija is None:
             cvor_stabla.lista_tipova.append("void")
             cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
-            print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+            #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
             config.doseg.lista_deklaracija.append(cvor_stabla)
             config.deklarirane_funkcije.append(cvor_stabla.vrati_ime())
         else:
@@ -242,13 +242,13 @@ def izravni_deklarator(cvor_stabla):
             cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
             cvor_stabla.lista_tipova = cvor_stabla.lista_djece[2].vrati_tipove(config.doseg)
             config.deklarirane_funkcije.append(cvor_stabla.vrati_ime())
-            print('doseg.lista dekl:', config.doseg.lista_deklaracija)
+            #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
             config.doseg.lista_deklaracija.append(cvor_stabla)
     return
 
 
 def inicijalizator(cvor_stabla):
-    print("U inicijalizator metodi")
+    #print("U inicijalizator metodi")
     if len(cvor_stabla.lista_djece) == 1:
         Izrazi.izraz_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:
@@ -272,7 +272,7 @@ def inicijalizator(cvor_stabla):
 
 
 def lista_izraza_pridruzivanja(cvor_stabla):
-    print("U lista izraza pridruzivanja metodi")
+    #print("U lista izraza pridruzivanja metodi")
     if len(cvor_stabla.lista_djece) == 1:
         Izrazi.izraz_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:

@@ -34,7 +34,7 @@ def parsiraj():
             cvor_roditelj.dodaj_dijete(cvor)
 
     config.korijen = korijen_stabla
-    korijen_stabla.ispisi_podstablo(korijen_stabla)
+    #korijen_stabla.ispisi_podstablo(korijen_stabla)
 
 
 def nadji_roditelja(cvor, lista_cvorova):

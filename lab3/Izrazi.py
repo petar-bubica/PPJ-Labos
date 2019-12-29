@@ -7,7 +7,7 @@ from CvorTablice import CvorTablice
 
 
 def primarni_izraz(cvor_stabla):
-    print("U primarni izraz metodi")
+    #print("U primarni izraz metodi")
 
     cvor = cvor_stabla.lista_djece[0]
     
@@ -60,7 +60,7 @@ def primarni_izraz(cvor_stabla):
 
 
 def postfiks_izraz(cvor_stabla):
-    print("U postfix izraz metodi", cvor_stabla, cvor_stabla.lista_djece)
+    #print("U postfix izraz metodi", cvor_stabla, cvor_stabla.lista_djece)
 
     if len(cvor_stabla.lista_djece) == 1:
         primarni_izraz(cvor_stabla.lista_djece[0])
@@ -82,7 +82,7 @@ def postfiks_izraz(cvor_stabla):
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
 
-        X = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[:3]
+        X = cvor_stabla.lista_djece[0].vrati_tip(config.doseg)[3:]
         je_konstanta = cvor_stabla.lista_djece[0].je_konstanta
         
         izraz(cvor_stabla.lista_djece[2])
@@ -157,7 +157,7 @@ def postfiks_izraz(cvor_stabla):
 
 
 def lista_argumenata(cvor_stabla):
-    print("U lista argumenata metodi")
+    #print("U lista argumenata metodi")
     if len(cvor_stabla.lista_djece) == 1:
         izraz_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:
@@ -177,7 +177,7 @@ def lista_argumenata(cvor_stabla):
 
 
 def unarni_izraz(cvor_stabla):
-    print("U unarni izraz metodi")
+    #print("U unarni izraz metodi")
 
     if len(cvor_stabla.lista_djece) == 1:
         postfiks_izraz(cvor_stabla.lista_djece[0])
@@ -209,7 +209,7 @@ def unarni_izraz(cvor_stabla):
 
 
 def cast_izraz(cvor_stabla):
-    print("U cast izraz metodi")
+    #print("U cast izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         unarni_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -234,7 +234,7 @@ def cast_izraz(cvor_stabla):
 
 
 def ime_tipa(cvor_stabla):
-    print("U ime tipa metodi")
+    #print("U ime tipa metodi")
     if len(cvor_stabla.lista_djece) == 1:
         specifikator_tipa(cvor_stabla.lista_djece[0])
         cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
@@ -250,7 +250,7 @@ def ime_tipa(cvor_stabla):
 
 
 def specifikator_tipa(cvor_stabla):
-    print("U specifikator tipa metodi")
+    #print("U specifikator tipa metodi")
     cvor = cvor_stabla.lista_djece[0]
     if cvor.podaci.startswith("KR_VOID"):
         cvor_stabla.postavi_tip("void")
@@ -262,7 +262,7 @@ def specifikator_tipa(cvor_stabla):
 
 
 def multiplikativni_izraz(cvor_stabla):
-    print("U multiplikativni izraz metodi")
+    #print("U multiplikativni izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         cast_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -290,7 +290,7 @@ def multiplikativni_izraz(cvor_stabla):
 
 
 def aditivni_izraz(cvor_stabla):
-    print("U aditivni izraz metodi")
+    #print("U aditivni izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         multiplikativni_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -318,7 +318,7 @@ def aditivni_izraz(cvor_stabla):
 
 
 def odnosni_izraz(cvor_stabla):
-    print("U odnosni izraz metodi")
+    #print("U odnosni izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         aditivni_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -346,7 +346,7 @@ def odnosni_izraz(cvor_stabla):
 
 
 def jednakosni_izraz(cvor_stabla):
-    print("U jednakosni izraz metodi")
+    #print("U jednakosni izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         odnosni_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -374,7 +374,7 @@ def jednakosni_izraz(cvor_stabla):
 
 
 def bin_i_izraz(cvor_stabla):
-    print("U bin i izraz metodi")
+    #print("U bin i izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         jednakosni_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -402,7 +402,7 @@ def bin_i_izraz(cvor_stabla):
 
 
 def bin_xili_izraz(cvor_stabla):
-    print("U bin xili izraz metodi")
+    #print("U bin xili izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         bin_i_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -430,7 +430,7 @@ def bin_xili_izraz(cvor_stabla):
 
 
 def bin_ili_izraz(cvor_stabla):
-    print("U bin ili izraz metodi")
+    #print("U bin ili izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         bin_xili_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -458,7 +458,7 @@ def bin_ili_izraz(cvor_stabla):
 
 
 def log_i_izraz(cvor_stabla):
-    print("U log i izraz metodi")
+    #print("U log i izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         bin_ili_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -486,7 +486,7 @@ def log_i_izraz(cvor_stabla):
 
 
 def log_ili_izraz(cvor_stabla):
-    print("U log ili izraz metodi")
+    #print("U log ili izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         log_i_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -514,7 +514,7 @@ def log_ili_izraz(cvor_stabla):
 
 
 def izraz_pridruzivanja(cvor_stabla):
-    print("U izraz pridruzivanja metodi")
+    #print("U izraz pridruzivanja metodi")
     if len(cvor_stabla.lista_djece) == 1:
         log_ili_izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -542,7 +542,7 @@ def izraz_pridruzivanja(cvor_stabla):
 
 
 def izraz(cvor_stabla):
-    print("U izraz metodi")
+    #print("U izraz metodi")
     if len(cvor_stabla.lista_djece) == 1:
         izraz_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:

@@ -92,7 +92,7 @@ class CvorStabla:
             
             while cvor_tablice is not None:
                 for deklaracija in cvor_tablice.lista_deklaracija:
-                    print('dekl:', deklaracija.podaci)
+                    #print('dekl:', deklaracija.podaci)
                     if deklaracija.vrati_ime() == self.vrati_ime():   #promjena
                         return deklaracija.vrati_tip(None)
                 cvor_tablice = cvor_tablice.roditelj

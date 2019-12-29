@@ -3,7 +3,7 @@ import copy
 
 
 def izracunaj_duljinu_znakova(cvor_stabla):
-    print("U izracunaj duljinu znakova metodi")
+    #print("U izracunaj duljinu znakova metodi")
     while cvor_stabla.lista_djece:
         cvor_stabla = cvor_stabla.lista_djece[0]
 
@@ -11,7 +11,7 @@ def izracunaj_duljinu_znakova(cvor_stabla):
 
 
 def ide_u_niz_znakova(cvor_stabla):
-    print("U ide u niz znakova metodi")
+    #print("U ide u niz znakova metodi")
     while cvor_stabla.lista_djece:
         if len(cvor_stabla.lista_djece) != 1:
             return False
@@ -20,7 +20,7 @@ def ide_u_niz_znakova(cvor_stabla):
 
 
 def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
-    print("U provjeri tipove metodi")
+    #print("U provjeri tipove metodi")
     if len(cvor_stabla_1.vrati_tipove(config.doseg)) != len(cvor_stabla_2.vrati_tipove(config.doseg)):
         return False
     for i in range(len(cvor_stabla_1.vrati_tipove(config.doseg))):
@@ -30,7 +30,7 @@ def provjeri_tipove(cvor_stabla_1, cvor_stabla_2):
 
 
 def vrati_lokalnu_deklaraciju(ime):
-    print("U vrati lokalnu deklaraciju metodi")
+    #print("U vrati lokalnu deklaraciju metodi")
     for deklaracija in config.doseg.lista_deklaracija:
         if deklaracija.vrati_ime() == ime:
             return deklaracija
@@ -38,7 +38,7 @@ def vrati_lokalnu_deklaraciju(ime):
 
 
 def je_deklarirano_lokalno(ime):
-    print("U je deklarirano lokalno metodi")
+    #print("U je deklarirano lokalno metodi")
     if config.doseg.lista_deklaracija is None: #Ona ima null
         return False
     for deklaracija in config.doseg.lista_deklaracija:
@@ -48,7 +48,7 @@ def je_deklarirano_lokalno(ime):
 
 
 def je_vec_deklarirano(ime):
-    print("U je vec deklarirano metodi", ime)
+    #print("U je vec deklarirano metodi", ime)
     cvor_tablice = config.doseg
     while cvor_tablice is not None:
         for deklaracija in cvor_tablice.lista_deklaracija:
@@ -59,7 +59,7 @@ def je_vec_deklarirano(ime):
 
 
 def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
-    print("U funkcija vec postoji metodi")
+    #print("U funkcija vec postoji metodi")
     while cvor_tablice is not None:
         for deklaracija in cvor_tablice.lista_deklaracija:
             if deklaracija.je_funkcija() and deklaracija.vrati_ime() == ime_funkcije and deklaracija.je_definiran:
@@ -69,7 +69,7 @@ def funkcija_vec_postoji(cvor_tablice, ime_funkcije):
 
 
 def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
-    print("U konfliktna deklaracija metodi")
+    #print("U konfliktna deklaracija metodi")
     while cvor_tablice.roditelj is not None:
         cvor_tablice = cvor_tablice.roditelj
     for deklaracija in cvor_tablice.lista_deklaracija:
@@ -79,30 +79,30 @@ def konfliktna_deklaracija(cvor_tablice, ime_funkcije, tip_funkcije):
 
 
 def je_castable(tip_1, tip_2):
-    print("U je castable metodi", tip_1, tip_2)
+    #print("U je castable metodi", tip_1, tip_2)
     return tip_1 == tip_2 or (tip_1 == "char" and tip_2 == "int")
 
 
 def ispisi_error_poruku(cvor_stabla):
-    print("U ispisi error poruku metodi")
+    #print("U ispisi error poruku metodi")
     print(cvor_stabla.podaci + " ::= " + str(cvor_stabla))
     config.error = True
     return
 
 
 def je_integer(x):
-    print("U je integer metodi")
+    #print("U je integer metodi")
     broj = int(x)
     return -2147483648 <= broj <= 2147483647
 
 
 def je_char(x):
-    print("U je char metodi")
+    #print("U je char metodi")
     return len(x) == 3 or (x[1] == '\\' and x[2] in "tn0'\"\\")
 
 
 def je_string(x):
-    print("U je string metodi")
+    #print("U je string metodi")
     for i in range(1, len(x) - 1):
         if x[i] == '\\':
             s = "'"
@@ -114,12 +114,12 @@ def je_string(x):
 
 
 def vrati_tip_trenutne_funkcije():
-    print("U vrati tip trenutne funkcije metodi")
+    #print("U vrati tip trenutne funkcije metodi")
 
     cvor = config.doseg
     prazan_string = ""
     while cvor is not None:
-        if cvor.lista_deklaracija:
+        if cvor.lista_deklaracija or not cvor.lista_deklaracija:
             reverzna_lista_deklaracija = list(reversed(cvor.lista_deklaracija))
             #print(reverzna_lista_deklaracija)
             for deklaracija in reverzna_lista_deklaracija:

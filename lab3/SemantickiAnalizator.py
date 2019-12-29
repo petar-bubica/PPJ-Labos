@@ -1,18 +1,20 @@
 # LAB3 EDITION
 # [najseksi PPJ ekipa + Petar Bubica]
 
+import sys
 import config
 import ParserStabla
 import NaredbenaStruktura
+#from Parser import Parser
 
 
 def analiziraj():
-    print("U analiziraj metodi")
+    #print("U analiziraj metodi")
     NaredbenaStruktura.prijevodna_jedinica(config.korijen)
 
 
 def funkcijski_error():
-    print("U funkcijski error metodi")
+    #print("U funkcijski error metodi")
     set_definicija = set(config.definirane_funkcije)
     set_deklaracija = set(config.deklarirane_funkcije)
     
@@ -20,7 +22,12 @@ def funkcijski_error():
         return False
     return True
 
-print("Pocetak programa")
+
+#print("Pocetak programa")
+#ulaz = sys.stdin.read().splitlines()
+#parser = Parser(ulaz)
+#config.korijen = parser.vrati_korijen()
+#print(korijen.ispisi_podstablo(korijen))
 ParserStabla.parsiraj()
 analiziraj()
 
