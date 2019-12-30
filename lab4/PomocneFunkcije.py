@@ -1,5 +1,7 @@
 from lab4 import config
 import copy
+from lab4 import CvorTablice
+from lab4 import CvorStabla
 
 
 def izracunaj_duljinu_znakova(cvor_stabla):
@@ -36,6 +38,14 @@ def vrati_lokalnu_deklaraciju(ime):
             return deklaracija
     return None
 
+def vrati_vec_deklarirano(ime):
+    cvor = config.doseg
+    while cvor != None:
+        for deklaracija in cvor.lista_deklaracija:
+            if deklaracija.vrati_ime() == ime:
+                return deklaracija
+        cvor = cvor.roditelj
+    return CvorStabla(0,"")
 
 def je_deklarirano_lokalno(ime):
     #print("U je deklarirano lokalno metodi")

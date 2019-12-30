@@ -30,10 +30,36 @@ def funkcijski_error():
 #print(korijen.ispisi_podstablo(korijen))
 ParserStabla.parsiraj()
 analiziraj()
+file = open("a.frisc","w")
 
-if not config.error:
-    if config.nema_main:
-        print('main')
-    else:
-        if funkcijski_error:
-            print('funkcija')
+file.write("\t`BASE D\n")
+file.write("\tMOVE 40000, R7\n")
+main = "\tCALL MAIN\n\tHALT\n\n"
+
+listaLabela = config.tabela
+nijeTab = True
+
+for kod in config.korijen.kod.split("\n"):
+    if not kod.startswith("\t") and nijeTab:
+        file.write(main)
+        nijeTab = False
+    file.write(kod + "\n")
+for labela in listaLabela:
+    if labela.je_fja == False:
+        file.write(labela.labela)
+        if labela.je_prazno == True:
+            file.write("\tDW %D 0\n")
+            continue
+        file.write(labela.vrati_bitove())
+
+file.close()
+
+
+
+#NEZ JEL OVO TREBA
+#if not config.error:
+    #if config.nema_main:
+        #print('main')
+    #else:
+        #if funkcijski_error:
+            #print('funkcija')

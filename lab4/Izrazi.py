@@ -23,7 +23,7 @@ def primarni_izraz(cvor_stabla):
         cvor_stabla.ime = cvor.vrati_ime()
         cvor_stabla.je_l_vrijednost = cvor.vrati_l_vrijednost(config.doseg)
 
-        identifikator = dohvati_vec_deklarirano(cvor.vrati_ime())
+        identifikator = PomocneFunkcije.dohvati_vec_deklarirano(cvor.vrati_ime())
         labela = identifikator.vrati_labelu()
 
         if cvor_stabla.je_funkcija:
@@ -135,7 +135,7 @@ def postfiks_izraz(cvor_stabla):
 
         cvor_stabla.postavi_tip(X)
         cvor_stabla.je_l_vrijednost = not (je_konstanta)
-        labela = dohvati_vec_deklarirano(cvor_stabla.lista_djece[0].vrati_ime()).labela
+        labela = PomocneFunkcije.dohvati_vec_deklarirano(cvor_stabla.lista_djece[0].vrati_ime()).labela
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
         cvor_stabla.dodaj_kod("\tPOP R0\n");
         cvor_stabla.dodaj_kod("\tSHL R0, %D 2, R0\n");

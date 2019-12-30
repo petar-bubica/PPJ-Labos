@@ -42,7 +42,7 @@ def slozena_naredba(cvor_stabla):
             labela = "L" + config.brojac_labela
             config.brojac_labela += 1
             cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n");
-            dohvati_vec_deklarirano(ime).labela = labela
+            PomocneFunkcije.dohvati_vec_deklarirano(ime).labela = labela
             offset -= 4
             novi = CvorTabliceUpgrade(labela, None)
             novi.je_prazno = True

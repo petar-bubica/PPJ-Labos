@@ -17,6 +17,8 @@ class CvorStabla:
         self.je_u_petlji = False
         self.ime = ''
         self.tip = ''
+        self.labela = ""
+        self.kod = ""
 
     def __repr__(self):
         #print("U repr metodi")
@@ -40,6 +42,8 @@ class CvorStabla:
             return
         cvor.dubina = self.dubina + 1
         self.lista_djece.append(cvor)
+    def dodaj_kod(self,kod):
+        self.kod += kod
 
     def dodaj_ime(self,ime):
         #print("U dodaj ime metodi")
