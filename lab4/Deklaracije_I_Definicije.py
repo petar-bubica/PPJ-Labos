@@ -1,9 +1,9 @@
-import config
-import PomocneFunkcije
-import Izrazi
-import NaredbenaStruktura
-from CvorStabla import CvorStabla
-from CvorTablice import CvorTablice
+from lab4 import config
+from lab4 import PomocneFunkcije
+from lab4 import Izrazi
+from lab4 import NaredbenaStruktura
+from lab4.CvorStabla import CvorStabla
+from lab4.CvorTablice import CvorTablice
 
 
 def definicija_funkcije(cvor_stabla):

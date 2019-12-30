@@ -1,5 +1,5 @@
-from CvorTablice import CvorTablice
-import config
+from lab4.CvorTablice import CvorTablice
+from lab4 import config
 
 
 class CvorStabla:

@@ -2,9 +2,9 @@
 # [najseksi PPJ ekipa + Petar Bubica]
 
 import sys
-import config
-import ParserStabla
-import NaredbenaStruktura
+from lab4 import config
+from lab4 import ParserStabla
+from lab4 import NaredbenaStruktura
 #from Parser import Parser
 
 

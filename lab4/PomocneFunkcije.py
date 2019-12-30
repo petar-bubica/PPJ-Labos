@@ -1,4 +1,4 @@
-import config
+from lab4 import config
 import copy
 
 

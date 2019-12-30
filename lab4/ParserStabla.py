@@ -1,6 +1,6 @@
 import sys
-import config
-from CvorStabla import CvorStabla
+from lab4 import config
+from lab4.CvorStabla import CvorStabla
 
 
 def parsiraj():
