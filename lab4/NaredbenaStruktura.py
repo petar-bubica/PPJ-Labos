@@ -4,6 +4,7 @@ from lab4 import Izrazi
 from lab4 import Deklaracije_I_Definicije
 from lab4.CvorStabla import CvorStabla
 from lab4.CvorTablice import CvorTablice
+from lab4.CvorTabliceUpgrade import CvorTabliceUpgrade
 
 
 def slozena_naredba(cvor_stabla):
@@ -35,10 +36,23 @@ def slozena_naredba(cvor_stabla):
         #print(str(novi_cvor))
         config.doseg.lista_deklaracija.append(novi_cvor)
 
+        offset = 4 * len(cvor_stabla.lista_imena)
+        for ime in cvor_stabla.lista_imena:
+            cvor_stabla.dodaj_kod("\tLOAD R0, (R7+" + offset + ")\n");
+            labela = "L" + config.brojac_labela
+            config.brojac_labela += 1
+            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n");
+            dohvati_vec_deklarirano(ime).labela = labela
+            offset -= 4
+            novi = CvorTabliceUpgrade(labela, None)
+            novi.je_prazno = True
+            config.tabela.append(novi)
+
     if len(cvor_stabla.lista_djece) == 3:
         lista_naredbi(cvor_stabla.lista_djece[1])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
     else:
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[1].je_u_petlji = True
@@ -50,7 +64,8 @@ def slozena_naredba(cvor_stabla):
         lista_naredbi(cvor_stabla.lista_djece[2])
         if config.error:
             return
-
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
     config.doseg = config.doseg.roditelj
     return
 
@@ -61,6 +76,7 @@ def lista_naredbi(cvor_stabla):
        naredba(cvor_stabla.lista_djece[0])
        if config.error:
            return
+       cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     elif len(cvor_stabla.lista_djece) > 1:
         lista_naredbi(cvor_stabla.lista_djece[0])
         if config.error:
@@ -68,6 +84,8 @@ def lista_naredbi(cvor_stabla):
         naredba((cvor_stabla.lista_djece[1]))
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
     return
 
 
@@ -93,6 +111,7 @@ def naredba(cvor_stabla):
 
     if config.error:
         return
+    cvor_stabla.dodaj_kod(desna_strana.kod)
 
     return
 
@@ -101,6 +120,7 @@ def izraz_naredba(cvor_stabla):
     #print("U izraz naredba metodi")
     if len(cvor_stabla.lista_djece) == 1:
         cvor_stabla.postavi_tip("int")
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     else:
         Izrazi.izraz(cvor_stabla.lista_djece[0])
         if config.error:
@@ -108,6 +128,7 @@ def izraz_naredba(cvor_stabla):
         cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
 
     return
 
@@ -131,6 +152,21 @@ def naredba_grananja(cvor_stabla):
         naredba(cvor_stabla.lista_djece[6])
         if config.error:
             return
+    cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
+    cvor_stabla.dodaj_kod("\tPOP R0\n")
+    cvor_stabla.dodaj_kod("\tCMP R0, 0\n")
+    cvor_stabla.dodaj_kod("\tJP_EQ " + "ELSE" + str(config.if_counter_label) + "\n")
+    cvor_stabla.dodaj_kod("THEN" + str(config.if_counter_label) + "\n")
+    cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[4].kod)
+    cvor_stabla.dodaj_kod("\tJP " + "ENDIF" + str(config.if_counter_label) + "\n")
+    cvor_stabla.dodaj_kod("\tJP_NE " + "ELSE" + str(config.if_counter_label) + "\n")
+    cvor_stabla.dodaj_kod("ELSE" + str(config.if_counter_label) + "\n")
+
+    if len(cvor_stabla.lista_djece) == 7:
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[6].kod)
+
+    cvor_stabla.dodaj_kod("ENDIF"+ str(config.if_counter_label) + "\n")
+    config.if_counter_label += 1
 
     return
 
@@ -215,12 +251,15 @@ def naredba_skoka(cvor_stabla):
         if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[1].vrati_tip(config.doseg), tip) or cvor_stabla.lista_djece[1].je_funkcija():
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
+        cvor_stabla.dodaj_kod("\tPOP R6\n\tRET\n")
 
     else:
         if cvor_stabla.lista_djece[0].podaci.startswith('KR_RETURN'):
             if PomocneFunkcije.vrati_tip_trenutne_funkcije() != 'void':
                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
                 return
+            cvor_stabla.dodaj_kod("\tRET\n")
         else:
             if not config.doseg.je_u_petlji:
                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
@@ -235,6 +274,7 @@ def prijevodna_jedinica(cvor_stabla):
         vanjska_deklaracija(cvor_stabla.lista_djece[0])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     elif len(cvor_stabla.lista_djece) > 1:
         prijevodna_jedinica(cvor_stabla.lista_djece[0])
         if config.error:
@@ -242,6 +282,8 @@ def prijevodna_jedinica(cvor_stabla):
         vanjska_deklaracija(cvor_stabla.lista_djece[1])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
     return
 
 
@@ -255,4 +297,5 @@ def vanjska_deklaracija(cvor_stabla):
         Deklaracije_I_Definicije.deklaracija(cvor_stabla.lista_djece[0])
         if config.error:
             return
+    cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     return

@@ -7,7 +7,7 @@ from lab4.CvorTablice import CvorTablice
 
 from lab4.CvorTabliceUpgrade import CvorTabliceUpgrade
 
-
+#PROVJERITI PRI KRAJU UVLAKE
 def primarni_izraz(cvor_stabla):
     #print("U primarni izraz metodi")
 
@@ -447,14 +447,14 @@ def odnosni_izraz(cvor_stabla):
         mapa["<="] = "SLE"
         mapa[">="] = "SGE"
 
-        cvor_stabla.dodaj_kod("\tJP_" + mapa[cvor_stabla.lista_djece[1].vrati_ime()] + " " + "TRUE"+ config.if_counter_label + "\n")
-        cvor_stabla.dodaj_kod("FALSE" + config.if_counter_label + "\n")
+        cvor_stabla.dodaj_kod("\tJP_" + mapa[cvor_stabla.lista_djece[1].vrati_ime()] + " " + "TRUE"+ str(config.if_counter_label) + "\n")
+        cvor_stabla.dodaj_kod("FALSE" + str(config.if_counter_label) + "\n")
         cvor_stabla.dodaj_kod("\tMOVE 0, R2\n")
-        cvor_stabla.dodaj_kod("\tJP " + "ENDIF" + config.if_counter_label + "\n")
+        cvor_stabla.dodaj_kod("\tJP " + "ENDIF" + str(config.if_counter_label) + "\n")
         config.if_counter_label += 1
-        cvor_stabla.appendKod("TRUE" + config.if_counter_label + "\n")
+        cvor_stabla.appendKod("TRUE" + str(config.if_counter_label) + "\n")
         cvor_stabla.appendKod("\tMOVE 1, R2\n")
-        cvor_stabla.appendKod("ENDIF" + config.if_counter_label + "\n")
+        cvor_stabla.appendKod("ENDIF" + str(config.if_counter_label) + "\n")
         cvor_stabla.appendKod("\tPUSH R2\n")
 
     return
