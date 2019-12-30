@@ -4,6 +4,7 @@ from lab4 import Izrazi
 from lab4 import NaredbenaStruktura
 from lab4.CvorStabla import CvorStabla
 from lab4.CvorTablice import CvorTablice
+from lab4.CvorTabliceUpgrade import CvorTabliceUpgrade
 
 
 def definicija_funkcije(cvor_stabla):
@@ -31,6 +32,16 @@ def definicija_funkcije(cvor_stabla):
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
         if config.error:
             return
+        if cvor_stabla.lista_djece[1].vrati_ime() == "main":
+            cvor_stabla.labela = "MAIN"
+        else:
+            cvor_stabla.labela = "F" + str(config.function_counter_label)
+            config.function_counter_label += 1
+        cvor_stabla.dodaj_kod(cvor_stabla.labela)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[5].kod)
+        novi = CvorTabliceUpgrade(cvor_stabla.labela, cvor_stabla)
+        novi.je_fja = True
+        config.tabela.append(novi)
     else:
         lista_parametara(cvor_stabla.lista_djece[3])
         if config.error:
@@ -45,12 +56,24 @@ def definicija_funkcije(cvor_stabla):
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[3].vrati_tipove(config.doseg)
         cvor_stabla.lista_djece[5].lista_imena = cvor_stabla.lista_djece[3].lista_imena
         cvor_stabla.lista_imena = cvor_stabla.lista_djece[3].lista_imena
+        if cvor_stabla.lista_djece[1].vrati_ime() == "main":
+            cvor_stabla.labela = "MAIN"
+        else:
+            cvor_stabla.labela = "F" + str(config.function_counter_label)
+            config.function_counter_label += 1
+        cvor_stabla.dodaj_kod(cvor_stabla.labela)
         config.definirane_funkcije.append(cvor_stabla.vrati_ime())
         #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         NaredbenaStruktura.slozena_naredba(cvor_stabla.lista_djece[5])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[5].kod)
+        if cvor_stabla.lista_djece[0].vrati_ime() == "void":
+            cvor_stabla.dodaj_kod("\tRET\n")
+        novi = CvorTabliceUpgrade(cvor_stabla.labela, cvor_stabla)
+        novi.je_fja = True
+        config.tabela.append(novi)
     return
 
 
@@ -101,12 +124,15 @@ def lista_deklaracija(cvor_stabla):
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[0].je_u_petlji = True
         deklaracija(cvor_stabla.lista_djece[0])
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     elif len(cvor_stabla.lista_djece) > 1:
         if cvor_stabla.je_u_petlji:
             cvor_stabla.lista_djece[0].je_u_petlji = True
             cvor_stabla.lista_djece[1].je_u_petlji = False
         lista_deklaracija(cvor_stabla.lista_djece[0])
         deklaracija(cvor_stabla.lista_djece[1])
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
     return
 
 
@@ -121,6 +147,7 @@ def deklaracija(cvor_stabla):
     if cvor_stabla.je_u_petlji:
         cvor_stabla.lista_djece[1].je_u_petlji = True
     lista_init_deklaratora(cvor_stabla.lista_djece[1])
+    cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
     return
 
 
@@ -135,6 +162,7 @@ def lista_init_deklaratora(cvor_stabla):
         init_deklarator(cvor_stabla.lista_djece[0])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
     elif len(cvor_stabla.lista_djece) > 1:
         cvor_stabla.lista_djece[0].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
         if cvor_stabla.je_konstanta:
@@ -144,6 +172,7 @@ def lista_init_deklaratora(cvor_stabla):
         lista_init_deklaratora(cvor_stabla.lista_djece[0])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
 
         cvor_stabla.lista_djece[2].postavi_tip(cvor_stabla.vrati_tip(config.doseg))
         if cvor_stabla.je_konstanta:
@@ -153,6 +182,7 @@ def lista_init_deklaratora(cvor_stabla):
         init_deklarator(cvor_stabla.lista_djece[2])
         if config.error:
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
     return
 
 
@@ -170,6 +200,17 @@ def init_deklarator(cvor_stabla):
         if cvor_stabla.lista_djece[0].je_konstanta:
             PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
             return
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        if cvor_stabla.lista_djece[0].tip.startswith("niz"):
+            for i in range(cvor_stabla.lista_djece[0].velicina_niza):
+                labela = "L" + str(config.brojac_labela)
+                config.brojac_labela += 1
+                if i == 0:
+                    cvor_stabla.labela = labela
+                novi = CvorTabliceUpgrade(labela, None)
+                novi.je_prazno = True
+                config.tabela.append(novi)
+            config.doseg.lista_deklaracija[len(config.doseg.lista_deklaracija)-1].labela = cvor_stabla.labela
     elif len(cvor_stabla.lista_djece) > 1:
         inicijalizator(cvor_stabla.lista_djece[2])
         if config.error:
@@ -183,10 +224,21 @@ def init_deklarator(cvor_stabla):
             if config.error:
                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
                 return
+            cvor_stabla.labela = cvor_stabla.lista_djece[2].labela
+            config.doseg.lista_deklaracija[len(config.doseg.lista_deklaracija) - 1].labela = cvor_stabla.labela
         else:
             if not PomocneFunkcije.je_castable(cvor_stabla.lista_djece[2].vrati_tip(config.doseg), cvor_stabla.lista_djece[0].vrati_tip(config.doseg)) or cvor_stabla.lista_djece[2].je_funkcija():
                 PomocneFunkcije.ispisi_error_poruku(cvor_stabla)
                 return
+            cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
+            labela = cvor_stabla.lista_djece[0].labela
+            cvor_stabla.dodaj_kod("\tLOAD R0, (R7)\n");
+            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n");
+            cvor_stabla.dodaj_kod("\tADD R7, 4, R7\n");
+            novi = CvorTabliceUpgrade(labela,cvor_stabla)
+            novi.je_prazno = True
+            config.tabela.append(novi)
+            cvor_stabla.labela = labela
     return
 
 
@@ -198,6 +250,8 @@ def izravni_deklarator(cvor_stabla):
             return
         cvor_stabla.je_definiran = False
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        labela = "L" + str(config.brojac_labela)
+        cvor_stabla.labela = labela
         #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)
         return
@@ -261,6 +315,8 @@ def inicijalizator(cvor_stabla):
             cvor_stabla.postavi_tip(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
             cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.labela = cvor_stabla.lista_djece[0].labela
     elif len(cvor_stabla.lista_djece) > 1:
         lista_izraza_pridruzivanja(cvor_stabla.lista_djece[1])
         if config.error:
@@ -268,6 +324,8 @@ def inicijalizator(cvor_stabla):
         cvor_stabla.velicina_niza = cvor_stabla.lista_djece[1].velicina_niza
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[1].vrati_tipove(config.doseg)
         cvor_stabla.ime = cvor_stabla.lista_djece[1].vrati_ime()
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
+        cvor_stabla.labela = cvor_stabla.lista_djece[1].labela
     return
 
 
@@ -279,6 +337,8 @@ def lista_izraza_pridruzivanja(cvor_stabla):
             return
         cvor_stabla.lista_tipova.append(cvor_stabla.lista_djece[0].vrati_tip(config.doseg))
         cvor_stabla.velicina_niza = 1
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.labela = cvor_stabla.lista_djece[0].labela
     elif len(cvor_stabla.lista_djece) > 1:
         lista_izraza_pridruzivanja(cvor_stabla.lista_djece[0])
         if config.error:
@@ -289,4 +349,7 @@ def lista_izraza_pridruzivanja(cvor_stabla):
         cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
         cvor_stabla.lista_tipova.append(cvor_stabla.lista_djece[2].vrati_tip(config.doseg))
         cvor_stabla.velicina_niza = cvor_stabla.lista_djece[0].velicina_niza + 1
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
+        cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
+        cvor_stabla.labela = cvor_stabla.lista_djece[0].labela
     return
