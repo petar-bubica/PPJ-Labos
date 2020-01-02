@@ -23,24 +23,23 @@ def primarni_izraz(cvor_stabla):
         cvor_stabla.ime = cvor.vrati_ime()
         cvor_stabla.je_l_vrijednost = cvor.vrati_l_vrijednost(config.doseg)
 
-        identifikator = PomocneFunkcije.dohvati_vec_deklarirano(cvor.vrati_ime())
-        labela = identifikator.vrati_labelu()
+        identifikator = PomocneFunkcije.vrati_vec_deklarirano(cvor.vrati_ime())
+        labela = identifikator.labela
 
         if cvor_stabla.je_funkcija:
-            cvor_stabla.dodaj_kod("\tCALL" + labela + "\n")
-            if len(cvor_stabla.vrati_tipove(config.doseg)) != 1 or (len(cvor_stabla.vrati_tipove(config.doseg)) == 1 and cvor_stabla.lista_tipova[0] == "void"):
-                cvor_stabla.dodaj_kod("\tADD R7, %D " + str(len(cvor_stabla.vrati_tipove(config.doseg))*4) + ", R7\n")
+            cvor_stabla.dodaj_kod("\tCALL " + labela + "\n")
+            if len(cvor_stabla.vrati_tipove(config.doseg)) != 1 or len(cvor_stabla.vrati_tipove(config.doseg) == 1 and cvor_stabla.lista_tipova[0] != "void"):
+                cvor_stabla.dodaj_kod("\tADD R7, %D " + str(len(cvor_stabla.vrati_tipove(config.doseg)) * 4) + ", R7\n")
             if cvor_stabla.vrati_tip(config.doseg) != "void":
-                cvor_stabla.dodaj_kod("\tPUSH R7\n")
+                cvor_stabla.dodaj_kod("\tPUSH R6\n")
         else:
             if cvor_stabla.tip.startswith("niz"):
                 cvor_stabla.dodaj_kod("\tMOVE " + labela + ", R0\n")
                 cvor_stabla.dodaj_kod("\tPUSH R0\n")
             else:
-                cvor_stabla.dodaj_kod("\tLOAD R0, ( " + labela + ")\n")
+                cvor_stabla.dodaj_kod("\tLOAD R0, (" + labela + ")\n")
                 cvor_stabla.dodaj_kod("\tPUSH R0\n")
-        cvor_stabla.postavi_labelu(labela)
-
+        cvor_stabla.labela = labela
 
     elif cvor.podaci.startswith('BROJ'):
 
@@ -50,11 +49,11 @@ def primarni_izraz(cvor_stabla):
         
         cvor_stabla.postavi_tip('int')
         cvor_stabla.je_l_vrijednost = False
-        cvor.labela = ("L" + config.brojac_labela)
+        cvor.labela = "L" + str(config.brojac_labela)
         config.brojac_labela += 1
 
-        config.tabela.append(CvorTabliceUpgrade(cvor.labela,cvor))
-        cvor_stabla.dodaj_kod("\tLOAD R0, ( " + cvor.labela + ")\n")
+        config.tabela.append(CvorTabliceUpgrade(cvor.labela, cvor))
+        cvor_stabla.dodaj_kod("\tLOAD R0, (" + cvor.labela + ")\n")
         cvor_stabla.dodaj_kod("\tPUSH R0\n")
         cvor_stabla.labela = cvor.labela
 
@@ -66,11 +65,11 @@ def primarni_izraz(cvor_stabla):
         cvor_stabla.postavi_tip('char')
         cvor_stabla.je_l_vrijednost = False
 
-        cvor.labela = ("L" + config.brojac_labela)
+        cvor.labela = "L" + str(config.brojac_labela)
         config.brojac_labela += 1
 
         config.tabela.append(CvorTabliceUpgrade(cvor.labela, cvor))
-        cvor_stabla.dodaj_kod("\tLOAD R0, ( " + cvor.labela + ")\n")
+        cvor_stabla.dodaj_kod("\tLOAD R0, (" + cvor.labela + ")\n")
         cvor_stabla.dodaj_kod("\tPUSH R0\n")
         cvor_stabla.labela = cvor.labela
 
@@ -134,14 +133,16 @@ def postfiks_izraz(cvor_stabla):
             return
 
         cvor_stabla.postavi_tip(X)
-        cvor_stabla.je_l_vrijednost = not (je_konstanta)
-        labela = PomocneFunkcije.dohvati_vec_deklarirano(cvor_stabla.lista_djece[0].vrati_ime()).labela
+        cvor_stabla.je_l_vrijednost = not je_konstanta
+        cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
+        cvor_stabla.lista_tipova = cvor_stabla.lista_djece[0].vrati_tipove(config.doseg)
+        labela = PomocneFunkcije.vrati_vec_deklarirano(cvor_stabla.lista_djece[0].vrati_ime()).labela
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
-        cvor_stabla.dodaj_kod("\tPOP R0\n");
-        cvor_stabla.dodaj_kod("\tSHL R0, %D 2, R0\n");
-        cvor_stabla.dodaj_kod("\tMOVE " + labela + ", R1\n");
-        cvor_stabla.dodaj_kod("\tADD R0, R1, R0\n");
-        cvor_stabla.dodaj_kod("\tLOAD R0, (R0)\n\tPUSH R0\n");
+        cvor_stabla.dodaj_kod("\tPOP R0\n")
+        cvor_stabla.dodaj_kod("\tSHL R0, %D 2, R0\n")
+        cvor_stabla.dodaj_kod("\tMOVE " + labela + ", R1\n")
+        cvor_stabla.dodaj_kod("\tADD R0, R1, R0\n")
+        cvor_stabla.dodaj_kod("\tLOAD R0, (R0)\n\tPUSH R0\n")
 
         return
 
@@ -204,14 +205,14 @@ def postfiks_izraz(cvor_stabla):
         cvor_stabla.postavi_tip('int')
         cvor_stabla.je_l_vrijednost = False
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
-        if cvor_stabla.lista_djece[0].vrati_ime() == "++":
-            cvor_stabla.dodaj_kod("\tPOP R0\n");
-            cvor_stabla.dodaj_kod("\tADD R0, 1, R0\n");
-            cvor_stabla.dodaj_kod("\tPUSH R0\n");
+        if cvor_stabla.lista_djece[1].vrati_ime() == "++":
+            cvor_stabla.dodaj_kod("\tPOP R0\n")
+            cvor_stabla.dodaj_kod("\tADD R0, 1, R0\n")
+            cvor_stabla.dodaj_kod("\tPUSH R0\n")
         else:
-            cvor_stabla.dodaj_kod("\tPOP R0\n");
-            cvor_stabla.dodaj_kod("\tSUB R0, 1, R0\n");
-            cvor_stabla.dodaj_kod("\tPUSH R0\n");
+            cvor_stabla.dodaj_kod("\tPOP R0\n")
+            cvor_stabla.dodaj_kod("\tSUB R0, 1, R0\n")
+            cvor_stabla.dodaj_kod("\tPUSH R0\n")
 
     return
 
@@ -272,11 +273,11 @@ def unarni_izraz(cvor_stabla):
         cvor_stabla.postavi_tip("int")
         cvor_stabla.je_l_vrijednost = False
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[1].kod)
-        cvor_stabla.dodaj_kod("\tPOP R0\n");
+        cvor_stabla.dodaj_kod("\tPOP R0\n")
         if cvor_stabla.lista_djece[0].lista_djece[0].vrati_ime() == "-":
             cvor_stabla.dodaj_kod("\tXOR R0, -1, R0\n\tADD R0, 1, R0\n")
         if cvor_stabla.lista_djece[0].lista_djece[0].vrati_ime() == "~":
-            cvor_stabla.dodaj_kod("\tXOR R0, %D -1, R0\n");
+            cvor_stabla.dodaj_kod("\tXOR R0, %D -1, R0\n")
         cvor_stabla.dodaj_kod("\tPUSH R0\n")
     return
 
@@ -441,13 +442,10 @@ def odnosni_izraz(cvor_stabla):
         cvor_stabla.dodaj_kod("\tPOP R1\n")
         cvor_stabla.dodaj_kod("\tPOP R0\n")
         cvor_stabla.dodaj_kod("\tCMP R0, R1\n")
-        mapa = {}
-        mapa["<"] = "SLT"
-        mapa[">"] = "SGT"
-        mapa["<="] = "SLE"
-        mapa[">="] = "SGE"
 
-        cvor_stabla.dodaj_kod("\tJP_" + mapa[cvor_stabla.lista_djece[1].vrati_ime()] + " " + "TRUE"+ str(config.if_counter_label) + "\n")
+        mapa = {"<": "SLT", ">": "SGT", "<=": "SLE", ">=": "SGE"}
+
+        cvor_stabla.dodaj_kod("\tJP_" + mapa[cvor_stabla.lista_djece[1].vrati_ime()] + " " + "TRUE" + str(config.if_counter_label) + "\n")
         cvor_stabla.dodaj_kod("FALSE" + str(config.if_counter_label) + "\n")
         cvor_stabla.dodaj_kod("\tMOVE 0, R2\n")
         cvor_stabla.dodaj_kod("\tJP " + "ENDIF" + str(config.if_counter_label) + "\n")
@@ -456,6 +454,7 @@ def odnosni_izraz(cvor_stabla):
         cvor_stabla.appendKod("\tMOVE 1, R2\n")
         cvor_stabla.appendKod("ENDIF" + str(config.if_counter_label) + "\n")
         cvor_stabla.appendKod("\tPUSH R2\n")
+        config.if_counter_label += 1
 
     return
 
@@ -519,9 +518,9 @@ def bin_i_izraz(cvor_stabla):
         cvor_stabla.je_l_vrijednost = False
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
-        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n");
-        cvor_stabla.dodaj_kod("\tAND R0, R1, R0\n");
-        cvor_stabla.dodaj_kod("\tPUSH R0\n");
+        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n")
+        cvor_stabla.dodaj_kod("\tAND R0, R1, R0\n")
+        cvor_stabla.dodaj_kod("\tPUSH R0\n")
 
     return
 
@@ -555,9 +554,9 @@ def bin_xili_izraz(cvor_stabla):
         cvor_stabla.je_l_vrijednost = False
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
-        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n");
-        cvor_stabla.dodaj_kod("\tXOR R0, R1, R0\n");
-        cvor_stabla.dodaj_kod("\tPUSH R0\n");
+        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n")
+        cvor_stabla.dodaj_kod("\tXOR R0, R1, R0\n")
+        cvor_stabla.dodaj_kod("\tPUSH R0\n")
     return
 
 
@@ -590,9 +589,9 @@ def bin_ili_izraz(cvor_stabla):
         cvor_stabla.je_l_vrijednost = False
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
-        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n");
-        cvor_stabla.dodaj_kod("\tOR R0, R1, R0\n");
-        cvor_stabla.dodaj_kod("\tPUSH R0\n");
+        cvor_stabla.dodaj_kod("\tPOP R0\n\tPOP R1\n")
+        cvor_stabla.dodaj_kod("\tOR R0, R1, R0\n")
+        cvor_stabla.dodaj_kod("\tPUSH R0\n")
     return
 
 
@@ -685,8 +684,8 @@ def izraz_pridruzivanja(cvor_stabla):
         cvor_stabla.je_l_vrijednost = False
         loop = 0
         while loop < (len(cvor_stabla.lista_djece[0].kod.split("\n")) - 2):
-            loop +=1 #ILI POSLIJE
             cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod.split("\n")[loop] + "\n")
+            loop += 1
         cvor_stabla.dodaj_kod("\tPUSH R0\n")
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
         cvor_stabla.dodaj_kod("\tPOP R1\n")

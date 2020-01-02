@@ -7,6 +7,7 @@ brojac_labela = 0
 tabela = []
 if_counter_label = 0
 function_counter_label = 0
+# brojac_povratnih_adresa = 0
 
 korijen = None
 doseg = CvorTablice()

@@ -42,7 +42,8 @@ class CvorStabla:
             return
         cvor.dubina = self.dubina + 1
         self.lista_djece.append(cvor)
-    def dodaj_kod(self,kod):
+
+    def dodaj_kod(self, kod):
         self.kod += kod
 
     def dodaj_ime(self,ime):

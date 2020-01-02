@@ -69,7 +69,7 @@ def definicija_funkcije(cvor_stabla):
         if config.error:
             return
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[5].kod)
-        if cvor_stabla.lista_djece[0].vrati_ime() == "void":
+        if cvor_stabla.lista_djece[0].vrati_tip(config.doseg) == "void":
             cvor_stabla.dodaj_kod("\tRET\n")
         novi = CvorTabliceUpgrade(cvor_stabla.labela, cvor_stabla)
         novi.je_fja = True
@@ -210,7 +210,7 @@ def init_deklarator(cvor_stabla):
                 novi = CvorTabliceUpgrade(labela, None)
                 novi.je_prazno = True
                 config.tabela.append(novi)
-            config.doseg.lista_deklaracija[len(config.doseg.lista_deklaracija)-1].labela = cvor_stabla.labela
+            config.doseg.lista_deklaracija[len(config.doseg.lista_deklaracija) - 1].labela = cvor_stabla.labela
     elif len(cvor_stabla.lista_djece) > 1:
         inicijalizator(cvor_stabla.lista_djece[2])
         if config.error:
@@ -232,10 +232,10 @@ def init_deklarator(cvor_stabla):
                 return
             cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[2].kod)
             labela = cvor_stabla.lista_djece[0].labela
-            cvor_stabla.dodaj_kod("\tLOAD R0, (R7)\n");
-            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n");
-            cvor_stabla.dodaj_kod("\tADD R7, 4, R7\n");
-            novi = CvorTabliceUpgrade(labela,cvor_stabla)
+            cvor_stabla.dodaj_kod("\tLOAD R0, (R7)\n")
+            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n")
+            cvor_stabla.dodaj_kod("\tADD R7, 4, R7\n")
+            novi = CvorTabliceUpgrade(labela, cvor_stabla)
             novi.je_prazno = True
             config.tabela.append(novi)
             cvor_stabla.labela = labela
@@ -251,6 +251,7 @@ def izravni_deklarator(cvor_stabla):
         cvor_stabla.je_definiran = False
         cvor_stabla.ime = cvor_stabla.lista_djece[0].vrati_ime()
         labela = "L" + str(config.brojac_labela)
+        config.brojac_labela += 1
         cvor_stabla.labela = labela
         #print('doseg.lista dekl:', config.doseg.lista_deklaracija)
         config.doseg.lista_deklaracija.append(cvor_stabla)

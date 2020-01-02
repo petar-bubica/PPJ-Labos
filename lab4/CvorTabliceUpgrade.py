@@ -1,6 +1,6 @@
 
 class CvorTabliceUpgrade:
-    def __init__(self,labela,cvor_stabla):
+    def __init__(self, labela, cvor_stabla):
         self.labela = labela
         self.cvor_stabla = cvor_stabla
         self.je_fja = False
@@ -15,7 +15,9 @@ class CvorTabliceUpgrade:
         i = 0
         var = "\t`DW "
         while i < 4:
-            var += "%D " + str((broj & maska)) + ", "
+            var += "%D " + str(broj & maska) + ", "
             broj >>= 8
-        duljina = len(var) - 2
-        return var[::duljina] + "\n"
+            i += 1
+        #duljina = len(var) - 2
+        #print('vrati bitove: ', var + "\n")
+        return var[:-2] + "\n"

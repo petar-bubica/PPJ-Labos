@@ -30,7 +30,7 @@ def funkcijski_error():
 #print(korijen.ispisi_podstablo(korijen))
 ParserStabla.parsiraj()
 analiziraj()
-file = open("a.frisc","w")
+file = open("a.frisc", "w")
 
 file.write("\t`BASE D\n")
 file.write("\tMOVE 40000, R7\n")
@@ -45,9 +45,9 @@ for kod in config.korijen.kod.split("\n"):
         nijeTab = False
     file.write(kod + "\n")
 for labela in listaLabela:
-    if labela.je_fja == False:
+    if not labela.je_fja:
         file.write(labela.labela)
-        if labela.je_prazno == True:
+        if labela.je_prazno:
             file.write("\tDW %D 0\n")
             continue
         file.write(labela.vrati_bitove())
@@ -56,7 +56,7 @@ file.close()
 
 
 
-#NEZ JEL OVO TREBA
+#NEZ JEL OVO TREBA -nek stoji sad, mislim da ne jer je ja msm pisalo u uputama da nece do ovakvih slucaja doc
 #if not config.error:
     #if config.nema_main:
         #print('main')

@@ -38,11 +38,11 @@ def slozena_naredba(cvor_stabla):
 
         offset = 4 * len(cvor_stabla.lista_imena)
         for ime in cvor_stabla.lista_imena:
-            cvor_stabla.dodaj_kod("\tLOAD R0, (R7+" + offset + ")\n");
-            labela = "L" + config.brojac_labela
+            cvor_stabla.dodaj_kod("\tLOAD R0, (R7+" + str(offset) + ")\n")
+            labela = "L" + str(config.brojac_labela)
             config.brojac_labela += 1
-            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n");
-            PomocneFunkcije.dohvati_vec_deklarirano(ime).labela = labela
+            cvor_stabla.dodaj_kod("\tSTORE R0, (" + labela + ")\n")
+            PomocneFunkcije.vrati_vec_deklarirano(ime).labela = labela
             offset -= 4
             novi = CvorTabliceUpgrade(labela, None)
             novi.je_prazno = True
@@ -81,7 +81,7 @@ def lista_naredbi(cvor_stabla):
         lista_naredbi(cvor_stabla.lista_djece[0])
         if config.error:
             return
-        naredba((cvor_stabla.lista_djece[1]))
+        naredba(cvor_stabla.lista_djece[1])
         if config.error:
             return
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[0].kod)
@@ -165,7 +165,7 @@ def naredba_grananja(cvor_stabla):
     if len(cvor_stabla.lista_djece) == 7:
         cvor_stabla.dodaj_kod(cvor_stabla.lista_djece[6].kod)
 
-    cvor_stabla.dodaj_kod("ENDIF"+ str(config.if_counter_label) + "\n")
+    cvor_stabla.dodaj_kod("ENDIF" + str(config.if_counter_label) + "\n")
     config.if_counter_label += 1
 
     return
